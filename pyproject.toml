@@ -1,0 +1,10 @@
+[project]
+name = "recipe-book"
+version = "0.1.0"
+description = "An app to store your recipes."
+readme = "README.md"
+authors = [
+    { name = "Kishan Patel", email = "kishanpatel789@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = []
