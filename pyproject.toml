@@ -7,4 +7,6 @@ authors = [
     { name = "Kishan Patel", email = "kishanpatel789@gmail.com" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "django>=5.2.5",
+]
