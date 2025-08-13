@@ -7,4 +7,8 @@ authors = [
     { name = "Kishan Patel", email = "kishanpatel789@gmail.com" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "dj-database-url>=3.0.1",
+    "django>=5.2.5",
+    "python-decouple>=3.8",
+]
