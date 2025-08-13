@@ -34,6 +34,7 @@ class Recipe(models.Model):
     # created_by =
     # modified_by =
     tags = models.ManyToManyField(Tag)
+    complementary = models.ManyToManyField("self", symmetrical=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:
