@@ -39,10 +39,9 @@ class Step(models.Model):
     recipe = models.ForeignKey(Recipe, related_name="steps", on_delete=models.CASCADE)
     order_id = models.SmallIntegerField()
     instruction = models.CharField(max_length=256)
-    ingredients = models.ManyToManyField("Ingredient", through="StepIngredient")
 
     def __str__(self):
-        return f"'{self.recipe.name}'/{self.order_id}"
+        return f"{self.recipe.slug}/{self.order_id}"
 
     class Meta:
         ordering = ["order_id"]
@@ -72,11 +71,14 @@ class Unit(models.Model):
 
 
 class StepIngredient(models.Model):
-    step = models.ForeignKey(Step, on_delete=models.CASCADE)
+    step = models.ForeignKey(Step, related_name="ingredients", on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     order_id = models.SmallIntegerField()
     quantity = models.FloatField(null=True)
     unit = models.ForeignKey(Unit, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f"{self.step.recipe.slug}/{self.step.order_id}/{self.order_id}"
 
 
 class Tag(models.Model):
