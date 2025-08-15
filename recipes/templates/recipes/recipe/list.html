@@ -4,7 +4,11 @@
 {% if recipes %}
 <ul>
     {% for recipe in recipes %}
-    <li>{{ recipe.name }}</li>
+    <li>
+        <a href="{% url 'recipe_detail' recipe.slug %}">
+            {{ recipe.name }}
+        </a>
+    </li>
     {% endfor %}
 </ul>
 
