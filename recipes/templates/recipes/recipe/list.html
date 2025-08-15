@@ -1,0 +1,15 @@
+{% extends "recipes/base.html" %}
+
+{% block content %}
+{% if recipes %}
+<ul>
+    {% for recipe in recipes %}
+    <li>{{ recipe.name }}</li>
+    {% endfor %}
+</ul>
+
+{% else %}
+<p>No recipes to show.</p>
+{% endif %}
+
+{% endblock %}
