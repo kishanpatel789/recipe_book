@@ -1,0 +1,25 @@
+{% extends "recipes/base.html" %}
+
+{% block title %}{{ recipe.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ recipe.name }}</h1>
+
+<div id="tags">
+    <span>
+        {% for tag in recipe.tags.all %}
+        #{{tag.slug}}
+        {% endfor %}
+    </span>
+</div>
+
+<div id="directions">
+    <h2>Directions</h2>
+    <ol class="list-decimal list-inside">
+        {% for step in recipe.steps.all %}
+        <li>{{ step.instruction }}</li>
+        {% endfor %}
+    </ol>
+</div>
+
+{% endblock %}
