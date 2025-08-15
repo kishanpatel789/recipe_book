@@ -1,0 +1,19 @@
+{% extends "recipes/base.html" %}
+
+{% block content %}
+{% if recipes %}
+<ul>
+    {% for recipe in recipes %}
+    <li>
+        <a href="{% url 'recipe_detail' recipe.slug %}">
+            {{ recipe.name }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+
+{% else %}
+<p>No recipes to show.</p>
+{% endif %}
+
+{% endblock %}
