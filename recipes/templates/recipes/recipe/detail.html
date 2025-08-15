@@ -3,10 +3,10 @@
 {% block title %}{{ recipe.name }}{% endblock %}
 
 {% block content %}
-<h1>{{ recipe.name }}</h1>
+<h1 class="text-7xl mb-2">{{ recipe.name }}</h1>
 
 <div id="tags">
-    <span>
+    <span class="text-sm pl-2">
         {% for tag in recipe.tags.all %}
         #{{tag.slug}}
         {% endfor %}
@@ -14,12 +14,12 @@
 </div>
 
 <div id="directions">
-    <h2>Directions</h2>
+    <h2 class="text-3xl mt-6 mb-2">Directions</h2>
     <ol class="list-decimal list-inside">
         {% for step in recipe.steps.all %}
         <li>{{ step.instruction }}</li>
 
-        <ul class="list-disc list-inside">
+        <ul class="list-disc list-inside ml-6">
             {% for item in step.ingredients.all %}
             <li>
                 {{ item.ingredient.name }}
@@ -51,7 +51,7 @@
 
 {% if recipe.complementary.exists %}
 <div id="complementaryDishes">
-    <h2>Complementary Dishes</h2>
+    <h2 class="text-2xl mt-6 mb-2">Complementary Dishes</h2>
     <ul>
         {% for comp in recipe.complementary.all %}
         <li>
