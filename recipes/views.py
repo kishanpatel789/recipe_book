@@ -2,7 +2,7 @@ from django.db.models import F, Min, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 
-from .models import Recipe, StepIngredient
+from .models import Ingredient, Recipe, StepIngredient
 
 
 def index(request):
@@ -44,3 +44,9 @@ def recipe_create(request): ...
 
 
 def recipe_edit(request): ...
+
+
+def ingredient_list(request):
+    ingredients = Ingredient.objects.all()
+
+    return render(request, "recipes/ingredient/list.html", {"ingredients": ingredients})
