@@ -1,0 +1,65 @@
+{% extends "recipes/base.html" %}
+
+{% block title %}{{ recipe.name }}{% endblock %}
+
+{% block content %}
+<h1 class="text-7xl mb-2">{{ recipe.name }}</h1>
+
+<div id="tags">
+    <span class="text-sm pl-2">
+        {% for tag in recipe.tags.all %}
+        #{{tag.slug}}
+        {% endfor %}
+    </span>
+</div>
+
+<div id="directions">
+    <h2 class="text-3xl mt-6 mb-2">Directions</h2>
+    <ol class="list-decimal list-inside">
+        {% for step in recipe.steps.all %}
+        <li>{{ step.instruction }}</li>
+
+        <ul class="list-disc list-inside ml-6">
+            {% for item in step.ingredients.all %}
+            <li>
+                {{ item.ingredient.name }}
+
+                {% if item.quantity %}
+                &ndash;
+                {{ item.quantity }}
+                {% endif %}
+
+                {% if item.quantity != 1 %}
+                {% if item.unit.abbr_plural %}
+                {{ item.unit.abbr_plural }}
+                {% else %}
+                {{ item.unit.name_plural }}
+                {% endif %}
+                {% else %}
+                {% if item.unit.abbr_singular %}
+                {{ item.unit.abbr_singular }}
+                {% else %}
+                {{ item.unit.name }}
+                {% endif %}
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </ol>
+</div>
+
+{% if recipe.complementary.exists %}
+<div id="complementaryDishes">
+    <h2 class="text-2xl mt-6 mb-2">Complementary Dishes</h2>
+    <ul>
+        {% for comp in recipe.complementary.all %}
+        <li>
+            <a href="{% url 'recipe_detail' comp.slug %}">{{ comp.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% endblock %}
