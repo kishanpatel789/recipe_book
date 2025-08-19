@@ -1,7 +1,8 @@
 from django.db.models import F, Min, Sum
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
+from .forms import IngredientCreateForm
 from .models import Ingredient, Recipe, StepIngredient
 
 
@@ -50,3 +51,18 @@ def ingredient_list(request):
     ingredients = Ingredient.objects.all()
 
     return render(request, "recipes/ingredient/list.html", {"ingredients": ingredients})
+
+
+def ingredient_create(request):
+    if request.method == "POST":
+        form = IngredientCreateForm(request.POST)
+        if form.is_valid():
+            ingredient_name = form.cleaned_data["name"]
+
+            Ingredient(name=ingredient_name).save()
+            return redirect("ingredient_list")
+
+    else:
+        form = IngredientCreateForm()
+
+    return render(request, "recipes/ingredient/create.html", {"form": form})

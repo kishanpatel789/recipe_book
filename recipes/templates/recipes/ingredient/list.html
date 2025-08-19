@@ -4,6 +4,8 @@
 
 <h1 class="text-3xl mt-6 mb-2">Ingredients</h1>
 
+<a href="{% url 'ingredient_create' %}">Create Ingredient</a>
+
 {% if ingredients %}
 <ul>
     {% for ingr in ingredients %}
