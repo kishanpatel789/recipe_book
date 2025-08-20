@@ -1,0 +1,15 @@
+{% extends "recipes/base.html" %}
+
+{% block title %}Create Ingredient{% endblock %}
+
+{% block content %}
+<h1 class="text-7xl mb-2">Create Ingredient</h1>
+
+<form method="POST">
+    {{ form }}
+    {% csrf_token %}
+    <input type="submit" value="Create Ingredient">
+</form>
+
+
+{% endblock %}

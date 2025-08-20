@@ -49,6 +49,36 @@
     </ol>
 </div>
 
+<div id="ingredients">
+    <h2 class="text-3xl mt-6 mb-2">Ingredients</h2>
+        <ul class="list-disc list-inside">
+            {% for item in ingredients %}
+            <li>
+                {{ item.ingredient__name }}
+
+                {% if item.quantity %}
+                &ndash;
+                {{ item.quantity }}
+                {% endif %}
+
+                {% if item.quantity != 1 %}
+                {% if item.unit__abbr_plural %}
+                {{ item.unit__abbr_plural }}
+                {% else %}
+                {{ item.unit__name_plural }}
+                {% endif %}
+                {% else %}
+                {% if item.unit__abbr_singular %}
+                {{ item.unit__abbr_singular }}
+                {% else %}
+                {{ item.unit__name }}
+                {% endif %}
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+</div>
+
 {% if recipe.complementary.exists %}
 <div id="complementaryDishes">
     <h2 class="text-2xl mt-6 mb-2">Complementary Dishes</h2>
