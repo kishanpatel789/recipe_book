@@ -11,6 +11,7 @@
     {% for ingr in ingredients %}
     <li>
         {{ ingr.name }}
+        <a href="{% url 'ingredient_edit' ingr.id %}">Edit</a>
     </li>
     {% endfor %}
 </ul>
