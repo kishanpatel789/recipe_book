@@ -11,4 +11,9 @@ urlpatterns = [
     path(
         "ingredients/edit/<int:ingr_id>/", views.ingredient_edit, name="ingredient_edit"
     ),
+    path(
+        "ingredients/delete/<int:ingr_id>/",
+        views.ingredient_delete,
+        name="ingredient_delete",
+    ),
 ]

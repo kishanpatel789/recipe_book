@@ -1,6 +1,7 @@
 from django.db.models import F, Min, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
 from .forms import IngredientCreateForm, IngredientEditForm
 from .models import Ingredient, Recipe, StepIngredient
@@ -85,3 +86,14 @@ def ingredient_edit(request, ingr_id):
         form = IngredientEditForm(instance=db_ingredient)
 
     return render(request, "recipes/ingredient/edit.html", {"form": form})
+
+
+@require_POST
+def ingredient_delete(request, ingr_id):
+    db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
+
+    if request.method == "POST":
+        db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
+        db_ingredient.delete()
+
+        return redirect("ingredient_list")

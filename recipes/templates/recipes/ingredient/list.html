@@ -12,6 +12,10 @@
     <li>
         {{ ingr.name }}
         <a href="{% url 'ingredient_edit' ingr.id %}">Edit</a>
+        <form action="{% url 'ingredient_delete' ingr.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Delete">
+        </form>
     </li>
     {% endfor %}
 </ul>
