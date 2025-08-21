@@ -1,0 +1,11 @@
+<tr>
+    <td><input autofocus name="name" value="{{ ingr.name }}"></td>
+    <td>
+        <button hx-get="{% url 'htmx_ingredient_list_item' ingr.id %}">
+            Cancel
+        </button>
+        <button>
+            Save
+        </button>
+    </td>
+</tr>

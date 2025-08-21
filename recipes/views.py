@@ -97,3 +97,17 @@ def ingredient_delete(request, ingr_id):
         db_ingredient.delete()
 
         return redirect("ingredient_list")
+
+
+def htmx_ingredient_edit(request, ingr_id):
+    db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
+
+    return render(request, "recipes/ingredient/_edit.html", {"ingr": db_ingredient})
+
+
+def htmx_ingredient_list_item(request, ingr_id):
+    db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
+
+    return render(
+        request, "recipes/ingredient/_list_item.html", {"ingr": db_ingredient}
+    )

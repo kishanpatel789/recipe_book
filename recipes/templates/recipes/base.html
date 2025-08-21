@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>{% block title %}Recipe Book{% endblock %}</title>
+  <head>
+    <title>{% block title %}Recipe Book{% endblock %}</title>
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
-    </head>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js" integrity="sha384-Akqfrbj/HpNVo8k11SXBb6TlBWmXXlYQrCSqEWmyKJe+hDm3Z/B2WVG4smwBkRVm" crossorigin="anonymous"></script>
+  </head>
 
-    <body class="flex flex-col h-screen">
+  <body class="flex flex-col h-screen">
 
-      <main class="grow">
-        {% block main %}
-          <div class="max-w-5xl mx-auto p-2">
-            {% block content %}
-            {% endblock %}
-          </div>
+    <main class="grow">
+      {% block main %}
+      <div class="max-w-5xl mx-auto p-2">
+        {% block content %}
         {% endblock %}
-      </main>
-    </body>
+      </div>
+      {% endblock %}
+    </main>
+  </body>
 </html>

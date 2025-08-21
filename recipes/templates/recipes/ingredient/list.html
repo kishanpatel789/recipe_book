@@ -1,20 +1,48 @@
 {% extends "recipes/base.html" %}
 
 {% block content %}
-<h1 class="text-3xl mt-6 mb-4 font-bold text-center">Ingredients</h1>
+<h1>Ingredients</h1>
 
-<div class="flex justify-center">
-  <a href="{% url 'ingredient_create' %}"
-     class="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">
+<div>
+    <a href="{% url 'ingredient_create' %}">
      + Create Ingredient
-  </a>
+    </a>
 </div>
 
 {% if ingredients %}
-<div class="flex flex-col items-center">
-    <ul class="max-w-lg">
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody hx-target="closest tr" hx-swap="outerHTML">
+    {% for ingr in ingredients %}
+    <tr>
+      <td>{{ ingr.name }}</td>
+      <td>
+        <button hx-get="{% url 'htmx_ingredient_edit' ingr.id %}"
+                >
+          Edit
+        </button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+{% else %}
+<p class="text-gray-600 mt-4">No ingredients to show.</p>
+{% endif %}
+
+<div>
+    <ul>
         {% for ingr in ingredients %}
-        <li class="flex items-center justify-between p-3">
+
+        <li>
             <!-- Ingredient name -->
             <span class="text-gray-800 me-4">{{ ingr.name }}</span>
 
@@ -38,7 +66,4 @@
         {% endfor %}
     </ul>
 </div>
-{% else %}
-<p class="text-gray-600 mt-4">No ingredients to show.</p>
-{% endif %}
 {% endblock %}

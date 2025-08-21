@@ -9,6 +9,16 @@ urlpatterns = [
     path("ingredients/", views.ingredient_list, name="ingredient_list"),
     path("ingredients/create/", views.ingredient_create, name="ingredient_create"),
     path(
+        "htmx/ingredients/list_item/<int:ingr_id>/",
+        views.htmx_ingredient_list_item,
+        name="htmx_ingredient_list_item",
+    ),
+    path(
+        "htmx/ingredients/edit/<int:ingr_id>/",
+        views.htmx_ingredient_edit,
+        name="htmx_ingredient_edit",
+    ),
+    path(
         "ingredients/edit/<int:ingr_id>/", views.ingredient_edit, name="ingredient_edit"
     ),
     path(

@@ -1,0 +1,8 @@
+<tr>
+  <td>{{ ingr.name }}</td>
+  <td>
+    <button hx-get="{% url 'htmx_ingredient_edit' ingr.id %}">
+      Edit
+    </button>
+  </td>
+</tr>
