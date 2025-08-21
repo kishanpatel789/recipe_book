@@ -75,8 +75,6 @@ def ingredient_edit(request, ingr_id):
     if request.method == "POST":
         form = IngredientEditForm(request.POST, instance=db_ingredient)
         if form.is_valid():
-            db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
-
             db_ingredient.name = form.cleaned_data["name"]
             db_ingredient.save()
 
@@ -93,7 +91,6 @@ def ingredient_delete(request, ingr_id):
     db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
 
     if request.method == "POST":
-        db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
         db_ingredient.delete()
 
         return redirect("ingredient_list")
@@ -102,12 +99,21 @@ def ingredient_delete(request, ingr_id):
 def htmx_ingredient_edit(request, ingr_id):
     db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
 
-    return render(request, "recipes/ingredient/_edit.html", {"ingr": db_ingredient})
+    if request.method == "POST":
+        form = IngredientEditForm(request.POST, instance=db_ingredient)
+        if form.is_valid():
+            db_ingredient.name = form.cleaned_data["name"]
+            db_ingredient.save()
+            return render(
+                request, "recipes/ingredient/_list_item.html", {"ingr": db_ingredient}
+            )
+        else:
+            # return form with error
+            pass
 
-
-def htmx_ingredient_list_item(request, ingr_id):
-    db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
-
-    return render(
-        request, "recipes/ingredient/_list_item.html", {"ingr": db_ingredient}
-    )
+    if request.method == "GET":
+        if request.GET.get("action", "") == "cancel":
+            return render(
+                request, "recipes/ingredient/_list_item.html", {"ingr": db_ingredient}
+            )
+        return render(request, "recipes/ingredient/_edit.html", {"ingr": db_ingredient})

@@ -1,10 +1,10 @@
 <tr>
     <td><input autofocus name="name" value="{{ ingr.name }}"></td>
     <td>
-        <button hx-get="{% url 'htmx_ingredient_list_item' ingr.id %}">
+        <button hx-get="{% url 'htmx_ingredient_edit' ingr.id %}{% querystring action='cancel' %}">
             Cancel
         </button>
-        <button>
+        <button hx-post="{% url 'htmx_ingredient_edit' ingr.id %}" hx-include="closest tr">
             Save
         </button>
     </td>
