@@ -3,10 +3,8 @@
 {% block content %}
 <h1>Ingredients</h1>
 
-<div>
-    <a href="{% url 'ingredient_create' %}">
-     + Create Ingredient
-    </a>
+<div id="ingredient-create-container">
+    {% include "recipes/ingredient/_create_button.html" %}
 </div>
 
 {% if ingredients %}
@@ -17,7 +15,7 @@
       <th></th>
     </tr>
   </thead>
-  <tbody hx-target="closest tr" hx-swap="outerHTML">
+  <tbody id="ingredient-table-body" hx-target="closest tr" hx-swap="outerHTML">
     {% for ingr in ingredients %}
       {% include "recipes/ingredient/_list_item.html" %}
     {% endfor %}

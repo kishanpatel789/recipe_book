@@ -96,6 +96,27 @@ def ingredient_delete(request, ingr_id):
         return redirect("ingredient_list")
 
 
+def htmx_ingredient_create(request):
+    if request.method == "POST":
+        form = IngredientCreateForm(request.POST)
+        if form.is_valid():
+            ingredient_name = form.cleaned_data["name"]
+            Ingredient(name=ingredient_name).save()
+
+            # TODO return oob partials
+        else:
+            # TODO return form with errors
+            pass
+        # context = {"form": form}
+        # return render(request, "recipes/ingredient/_create.html", context)
+
+    if request.method == "GET":
+        if request.GET.get("action", "") == "cancel":
+            return render(request, "recipes/ingredient/_create_button.html")
+        form = IngredientCreateForm(initial={"name": ""})
+        return render(request, "recipes/ingredient/_create.html", {"form": form})
+
+
 def htmx_ingredient_edit(request, ingr_id):
     db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
 
@@ -108,7 +129,7 @@ def htmx_ingredient_edit(request, ingr_id):
                 request, "recipes/ingredient/_list_item.html", {"ingr": db_ingredient}
             )
         else:
-            # return form with error
+            # return form with errors
             context = {"ingr": db_ingredient, "form": form}
             return render(request, "recipes/ingredient/_edit.html", context)
 
