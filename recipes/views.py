@@ -109,11 +109,14 @@ def htmx_ingredient_edit(request, ingr_id):
             )
         else:
             # return form with error
-            pass
+            context = {"ingr": db_ingredient, "form": form}
+            return render(request, "recipes/ingredient/_edit.html", context)
 
     if request.method == "GET":
         if request.GET.get("action", "") == "cancel":
             return render(
                 request, "recipes/ingredient/_list_item.html", {"ingr": db_ingredient}
             )
-        return render(request, "recipes/ingredient/_edit.html", {"ingr": db_ingredient})
+        form = IngredientEditForm(instance=db_ingredient)
+        context = {"ingr": db_ingredient, "form": form}
+        return render(request, "recipes/ingredient/_edit.html", context)
