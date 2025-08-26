@@ -101,20 +101,22 @@ def htmx_ingredient_create(request):
         form = IngredientCreateForm(request.POST)
         if form.is_valid():
             ingredient_name = form.cleaned_data["name"]
-            Ingredient(name=ingredient_name).save()
-
-            # TODO return oob partials
+            ingr = Ingredient.objects.create(name=ingredient_name)
+            context = {"ingr": ingr}
+            return render(
+                request, "recipes/ingredient/_create_button_oob.html", context
+            )
         else:
-            # TODO return form with errors
-            pass
-        # context = {"form": form}
-        # return render(request, "recipes/ingredient/_create.html", context)
+            # return form with errors
+            context = {"form": form}
+            return render(request, "recipes/ingredient/_create.html", context)
 
     if request.method == "GET":
         if request.GET.get("action", "") == "cancel":
             return render(request, "recipes/ingredient/_create_button.html")
-        form = IngredientCreateForm(initial={"name": ""})
-        return render(request, "recipes/ingredient/_create.html", {"form": form})
+        else:
+            form = IngredientCreateForm(initial={"name": ""})
+            return render(request, "recipes/ingredient/_create.html", {"form": form})
 
 
 def htmx_ingredient_edit(request, ingr_id):
@@ -138,6 +140,7 @@ def htmx_ingredient_edit(request, ingr_id):
             return render(
                 request, "recipes/ingredient/_list_item.html", {"ingr": db_ingredient}
             )
-        form = IngredientEditForm(instance=db_ingredient)
-        context = {"ingr": db_ingredient, "form": form}
-        return render(request, "recipes/ingredient/_edit.html", context)
+        else:
+            form = IngredientEditForm(instance=db_ingredient)
+            context = {"ingr": db_ingredient, "form": form}
+            return render(request, "recipes/ingredient/_edit.html", context)

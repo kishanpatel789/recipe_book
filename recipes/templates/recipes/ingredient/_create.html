@@ -5,9 +5,14 @@
     hx-get="{% url 'htmx_ingredient_create' %}{% querystring action='cancel' %}"
     hx-target="#ingredient-create-container"
     hx-swap="innerHTML"
->
+    >
     Cancel
 </button>
-<button hx-post="{% url 'htmx_ingredient_create' %}">
-    Create
+<button
+  hx-post="{% url 'htmx_ingredient_create' %}"
+  hx-include="closest div"
+  hx-target="#ingredient-create-container"
+  hx-swap="innerHTML"
+  >
+  Create
 </button>
