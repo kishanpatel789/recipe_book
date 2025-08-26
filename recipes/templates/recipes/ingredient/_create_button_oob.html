@@ -2,13 +2,6 @@
 
 <template>
   <tbody hx-swap-oob="afterbegin:#ingredient-table-body">
-    <tr>
-      <td>{{ ingr.name }}</td>
-      <td>
-        <button hx-get="{% url 'htmx_ingredient_edit' ingr.id %}">
-          Edit
-        </button>
-      </td>
-    </tr>
+  {% include "recipes/ingredient/_list_item.html" %}
   </tbody>
 </template>
