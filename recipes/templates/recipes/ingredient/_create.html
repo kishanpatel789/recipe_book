@@ -1,0 +1,13 @@
+{{ form.non_field_errors }}
+{{ form.name.errors }}
+<input autofocus name="name" value="{{ form.name.value }}">
+<button
+    hx-get="{% url 'htmx_ingredient_create' %}{% querystring action='cancel' %}"
+    hx-target="#ingredient-create-container"
+    hx-swap="innerHTML"
+>
+    Cancel
+</button>
+<button hx-post="{% url 'htmx_ingredient_create' %}">
+    Create
+</button>
