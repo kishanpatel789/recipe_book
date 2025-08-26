@@ -1,7 +1,7 @@
 from django.db.models import F, Min, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods, require_POST
 
 from .forms import IngredientCreateForm, IngredientEditForm
 from .models import Ingredient, Recipe, StepIngredient
@@ -144,3 +144,10 @@ def htmx_ingredient_edit(request, ingr_id):
             form = IngredientEditForm(instance=db_ingredient)
             context = {"ingr": db_ingredient, "form": form}
             return render(request, "recipes/ingredient/_edit.html", context)
+
+
+@require_http_methods(["DELETE"])
+def htmx_ingredient_delete(request, ingr_id):
+    db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
+    db_ingredient.delete()
+    return HttpResponse(status=200)
