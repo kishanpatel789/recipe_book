@@ -1,9 +1,9 @@
 from django.db.models import F, Min, Sum
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 
-from .forms import IngredientCreateForm, IngredientEditForm
+from .forms import IngredientCreateForm, IngredientEditForm, RecipeCreateForm
 from .models import Ingredient, Recipe, StepIngredient
 
 
@@ -42,7 +42,18 @@ def recipe_detail(request, recipe_slug):
     )
 
 
-def recipe_create(request): ...
+def recipe_create(request):
+    if request.method == "POST":
+        form = RecipeCreateForm(request.POST)
+        if form.is_valid():
+            rep = Recipe.objects.create(name=form.cleaned_data["name"])
+            rep.complementary.set(form.cleaned_data["complementary"])
+            rep.tags.set(form.cleaned_data["tags"])
+            return redirect("recipe_detail", recipe_slug=rep.slug)
+    else:
+        form = RecipeCreateForm()
+
+    return render(request, "recipes/recipe/create.html", {"form": form})
 
 
 def recipe_edit(request): ...
