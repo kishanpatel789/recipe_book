@@ -4,10 +4,13 @@
 <h1>Ingredients</h1>
 
 <div id="ingredient-create-container">
-    {% include "recipes/ingredient/_create_button.html" %}
+  {% include "recipes/ingredient/_create_button.html" %}
 </div>
 
-{% if ingredients %}
+{% if not ingredients %}
+<p class="text-gray-600 mt-4">No ingredients to show.</p>
+{% endif %}
+
 <table>
   <thead>
     <tr>
@@ -17,14 +20,9 @@
   </thead>
   <tbody id="ingredient-table-body" hx-target="closest tr" hx-swap="outerHTML">
     {% for ingr in ingredients %}
-      {% include "recipes/ingredient/_list_item.html" %}
+    {% include "recipes/ingredient/_list_item.html" %}
     {% endfor %}
   </tbody>
 </table>
-
-{% else %}
-<p class="text-gray-600 mt-4">No ingredients to show.</p>
-{% endif %}
-
 
 {% endblock %}

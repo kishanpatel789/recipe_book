@@ -4,5 +4,10 @@
     <button hx-get="{% url 'htmx_ingredient_edit' ingr.id %}">
       Edit
     </button>
+    <button
+        hx-confirm="Are you sure you want to delete '{{ ingr.name }}'?"
+        hx-delete="{% url 'htmx_ingredient_delete' ingr.id %}">
+      Delete
+    </button>
   </td>
 </tr>

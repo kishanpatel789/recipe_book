@@ -1,0 +1,7 @@
+{% include "recipes/ingredient/_create_button.html" %}
+
+<template>
+  <tbody hx-swap-oob="afterbegin:#ingredient-table-body">
+  {% include "recipes/ingredient/_list_item.html" %}
+  </tbody>
+</template>
