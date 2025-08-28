@@ -24,4 +24,8 @@
 
 <a href="{% url 'recipe_list' %}">Cancel</a>
 
+<li style="display: none;">
+{{ form_steps.empty_form.instruction }}
+</li>
+
 {% endblock %}
