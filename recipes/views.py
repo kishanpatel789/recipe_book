@@ -8,7 +8,7 @@ from .models import Ingredient, Recipe, StepIngredient
 
 
 def index(request):
-    return HttpResponse("Recipe Book is live!")
+    return render(request, "recipes/index.html")
 
 
 def recipe_list(request):
