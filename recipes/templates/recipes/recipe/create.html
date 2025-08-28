@@ -6,8 +6,19 @@
 <h1>Create Recipe</h1>
 
 <form method="POST">
-    {{ form }}
     {% csrf_token %}
+    {{ form }}
+
+    <hr>
+    <h2>Steps</h2>
+    {{ form_steps.management_form }}
+
+    <ol>
+      {% for form_step in form_steps %}
+        <li>{{ form_step.instruction }}</li>
+      {% endfor %}
+    </ol>
+
     <input type="submit" value="Create Recipe">
 </form>
 
