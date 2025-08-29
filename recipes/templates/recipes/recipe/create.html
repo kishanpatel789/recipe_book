@@ -1,4 +1,5 @@
 {% extends "recipes/base.html" %}
+{% load static %}
 
 {% block title %}Create Recipe{% endblock %}
 
@@ -11,6 +12,8 @@
 
     <hr>
     <h2>Steps</h2>
+    <button id="remove-step" type="button">-</button>
+    <button id="add-step" type="button">+</button>
     {{ form_steps.management_form }}
 
     <ol>
@@ -24,8 +27,12 @@
 
 <a href="{% url 'recipe_list' %}">Cancel</a>
 
-<li style="display: none;">
+<li id="step-template" style="display: none;">
 {{ form_steps.empty_form.instruction }}
 </li>
 
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'recipes/js/recipe_create.js' %}"></script>
 {% endblock %}
