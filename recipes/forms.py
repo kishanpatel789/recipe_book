@@ -5,7 +5,7 @@ from django.forms import (
     inlineformset_factory,
 )
 
-from .models import Ingredient, Recipe, Step
+from .models import Ingredient, Recipe, Step, StepIngredient
 
 
 class BaseStepFormSet(BaseInlineFormSet):
@@ -41,4 +41,14 @@ StepCreateFormSet = inlineformset_factory(
     min_num=1,
     extra=0,
     max_num=25,
+)
+
+StepIngredientCreateFormSet = inlineformset_factory(
+    Step,
+    StepIngredient,
+    fields=["ingredient", "quantity", "unit"],
+    can_delete=False,
+    min_num=0,
+    extra=3,
+    max_num=10,
 )
