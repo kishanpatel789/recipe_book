@@ -38,5 +38,7 @@ StepCreateFormSet = inlineformset_factory(
     # form=BaseStepFormSet,
     # can_order=True,
     can_delete=False,
-    extra=3,
+    min_num=1,
+    extra=0,
+    max_num=25,
 )

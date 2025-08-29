@@ -16,7 +16,7 @@
     <button id="add-step" type="button">+</button>
     {{ form_steps.management_form }}
 
-    <ol>
+    <ol id="step-list">
       {% for form_step in form_steps %}
         <li>{{ form_step.instruction }}</li>
       {% endfor %}
