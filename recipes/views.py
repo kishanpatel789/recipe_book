@@ -8,6 +8,7 @@ from .forms import (
     IngredientEditForm,
     RecipeCreateForm,
     StepCreateFormSet,
+    StepIngredientCreateFormSet,
 )
 from .models import Ingredient, Recipe, StepIngredient
 
@@ -51,6 +52,7 @@ def recipe_create(request):
     if request.method == "POST":
         form = RecipeCreateForm(request.POST)
         form_steps = StepCreateFormSet(request.POST, prefix="step")
+        form_stepingredients = StepIngredientCreateFormSet(prefix="stepingr")
 
         if form.is_valid() and form_steps.is_valid():
             recipe = form.save()
@@ -65,8 +67,13 @@ def recipe_create(request):
     else:
         form = RecipeCreateForm()
         form_steps = StepCreateFormSet(prefix="step")
+        form_stepingredients = StepIngredientCreateFormSet(prefix="stepingr")
 
-    context = {"form": form, "form_steps": form_steps}
+    context = {
+        "form": form,
+        "form_steps": form_steps,
+        "form_stepingredients": form_stepingredients,
+    }
 
     return render(request, "recipes/recipe/create.html", context)
 
