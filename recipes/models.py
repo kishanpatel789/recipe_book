@@ -10,8 +10,8 @@ class Recipe(models.Model):
     # created_by =
     # modified_by =
 
-    tags = models.ManyToManyField("Tag")
-    complementary = models.ManyToManyField("self", symmetrical=False)
+    tags = models.ManyToManyField("Tag", blank=True)
+    complementary = models.ManyToManyField("self", symmetrical=False, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

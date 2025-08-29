@@ -1,0 +1,12 @@
+{% extends "recipes/base.html" %}
+
+{% block content %}
+
+<h1>Recipe Book</h1>
+
+<ul>
+  <li><a href="{% url 'recipe_list' %}">View Recipes</a></li>
+  <li><a href="{% url 'ingredient_list' %}">Manage Ingredients</a></li>
+</ul>
+
+{% endblock %}

@@ -1,6 +1,9 @@
 {% extends "recipes/base.html" %}
 
 {% block content %}
+
+<a href="{% url 'recipe_create' %}">+ Create Recipe</a>
+
 {% if recipes %}
 <ul>
     {% for recipe in recipes %}
@@ -15,5 +18,9 @@
 {% else %}
 <p>No recipes to show.</p>
 {% endif %}
+
+<hr>
+
+<a href="{% url 'index' %}">Go home</a>
 
 {% endblock %}
