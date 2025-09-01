@@ -55,6 +55,7 @@ def recipe_create(request):
         form_stepingredients = StepIngredientCreateFormSet(prefix="stepingr")
 
         if form.is_valid() and form_steps.is_valid():
+            breakpoint()
             recipe = form.save()
 
             steps = form_steps.save(commit=False)
@@ -62,6 +63,11 @@ def recipe_create(request):
                 step.recipe = recipe
                 step.order_id = i
                 step.save()
+
+            # stepingredients = form_stepingredients.save(commit=False)
+            # TODO: process step-ingredients
+            # for i, stepingr in enumerate(stepingredients):
+            # pass
 
             return redirect("recipe_detail", recipe_slug=recipe.slug)
     else:
