@@ -19,9 +19,11 @@
 
     <ol id="step-list">
       {% for form_step in form_steps %}
-        <li>{{ form_step.instruction }}</li>
-        <button class="remove-ingredient" type="button">-</button>
-        <button class="add-ingredient" type="button">+</button>
+        <li data-step-index="{{ forloop.counter0 }}">
+          {{ form_step.instruction }}
+          <button data-step-index="{{ forloop.counter0 }}" class="remove-ingredient" type="button">-</button>
+          <button data-step-index="{{ forloop.counter0 }}" class="add-ingredient" type="button">+</button>
+        </li>
         <ul>
           {% for form_stepingr in form_stepingredients %}
           <li>
@@ -41,14 +43,16 @@
 <a href="{% url 'recipe_list' %}">Cancel</a>
 
 <li id="step-template" style="display: none;">
-{{ form_steps.empty_form.instruction }}
+  {{ form_steps.empty_form.instruction }}
+  <button class="remove-ingredient" type="button">-</button>
+  <button class="add-ingredient" type="button">+</button>
 </li>
 
-<ul id="step-ingredient-template" style="display: none;">
-  <li>{{ form_step_ingredients.empty_form.ingredient }}</li>
-  <li>{{ form_step_ingredients.empty_form.quantity }}</li>
-  <li>{{ form_step_ingredients.empty_form.unit }}</li>
-</ul>
+<li id="step-ingredient-template" style="display: none;">
+  {{ form_stepingredients.empty_form.ingredient }}
+  {{ form_stepingredients.empty_form.quantity }}
+  {{ form_stepingredients.empty_form.unit }}
+</li>
 
 {% endblock %}
 
