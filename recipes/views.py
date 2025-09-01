@@ -55,7 +55,6 @@ def recipe_create(request):
         form_stepingredients = StepIngredientCreateFormSet(prefix="stepingr")
 
         if form.is_valid() and form_steps.is_valid():
-            breakpoint()
             recipe = form.save()
 
             steps = form_steps.save(commit=False)
