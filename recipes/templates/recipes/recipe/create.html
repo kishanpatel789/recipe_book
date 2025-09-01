@@ -1,4 +1,5 @@
 {% extends "recipes/base.html" %}
+{% load static %}
 
 {% block title %}Create Recipe{% endblock %}
 
@@ -11,21 +12,46 @@
 
     <hr>
     <h2>Steps</h2>
+    <button id="remove-step" type="button">-</button>
+    <button id="add-step" type="button">+</button>
     {{ form_steps.management_form }}
+    {{ form_stepingredients.management_form }}
 
-    <ol>
+    <ol id="step-list">
       {% for form_step in form_steps %}
         <li>{{ form_step.instruction }}</li>
+        <button class="remove-ingredient" type="button">-</button>
+        <button class="add-ingredient" type="button">+</button>
+        <ul>
+          {% for form_stepingr in form_stepingredients %}
+          <li>
+          {{ form_stepingr.ingredient }}
+          {{ form_stepingr.quantity }}
+          {{ form_stepingr.unit }}
+          </li>
+          {% endfor %}
+        </ul>
       {% endfor %}
     </ol>
+
 
     <input type="submit" value="Create Recipe">
 </form>
 
 <a href="{% url 'recipe_list' %}">Cancel</a>
 
-<li style="display: none;">
+<li id="step-template" style="display: none;">
 {{ form_steps.empty_form.instruction }}
 </li>
 
+<ul id="step-ingredient-template" style="display: none;">
+  <li>{{ form_step_ingredients.empty_form.ingredient }}</li>
+  <li>{{ form_step_ingredients.empty_form.quantity }}</li>
+  <li>{{ form_step_ingredients.empty_form.unit }}</li>
+</ul>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'recipes/js/recipe_create.js' %}"></script>
 {% endblock %}
