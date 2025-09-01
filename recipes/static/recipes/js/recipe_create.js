@@ -6,26 +6,32 @@ const stepFormTemplate = document.querySelector("#step-template");
 const addStepButton = document.querySelector("#add-step");
 const removeStepButton = document.querySelector("#remove-step");
 
-function addStep() {
-  const formIndex = parseInt(totalStepFormsInput.value);
-  if (formIndex < maxNumStepForms) {
-    const newForm = stepFormTemplate.cloneNode(true);
-    newForm.removeAttribute("id")
-    newForm.style.display = "";  // make visible
-    newForm.innerHTML = newForm.innerHTML.replace(/__prefix__/g, formIndex);
-    newForm.querySelectorAll(".add-ingredient, .remove-ingredient")
-      .forEach(btn => btn.setAttribute("data-step-index", formIndex));
 
-    stepList.appendChild(newForm);
-    totalStepFormsInput.value = formIndex + 1;
+const totalStepIngredientFormsInput = document.querySelector("#id_stepingr-TOTAL_FORMS");
+const stepIngredientFormTemplate = document.querySelector("#step-ingredient-template");
+
+function addStep() {
+  const stepIndex = parseInt(totalStepFormsInput.value);
+  if (stepIndex < maxNumStepForms) {
+    const newStep = stepFormTemplate.cloneNode(true);
+    newStep.removeAttribute("id")
+    newStep.style.display = "";  // make visible
+    newStep.innerHTML = newStep.innerHTML.replace(/__prefix__/g, stepIndex);
+
+    newStep.dataset.stepIndex = stepIndex;
+    newStep.querySelectorAll(".add-ingredient, .remove-ingredient")
+      .forEach(btn => btn.dataset.stepIndex = stepIndex);
+
+    stepList.appendChild(newStep);
+    totalStepFormsInput.value = stepIndex + 1;
   }
 }
 
 function removeStep() {
-  const formIndex = parseInt(totalStepFormsInput.value);
-  if (formIndex > minNumStepForms) {
+  const stepIndex = parseInt(totalStepFormsInput.value);
+  if (stepIndex > minNumStepForms) {
     stepList.lastElementChild.remove();
-    totalStepFormsInput.value = formIndex - 1;
+    totalStepFormsInput.value = stepIndex - 1;
   }
 }
 
@@ -39,19 +45,45 @@ removeStepButton.addEventListener("click", (e) => {
   removeStep();
 });
 
+function addIngredient(stepIndex) {
+  const ingredientIndex = parseInt(totalStepIngredientFormsInput.value);
+
+  const newIngredient = stepIngredientFormTemplate.cloneNode(true);
+  newIngredient.removeAttribute("id");
+  newIngredient.style.display = "";
+
+  newIngredient.innerHTML = newIngredient.innerHTML.replace(/__prefix__/g, ingredientIndex);
+
+  newIngredient.dataset.stepIndex = stepIndex;
+
+  const stepItem = stepList.querySelector(`li[data-step-index="${stepIndex}"]`);
+  const ingredientList = stepItem.querySelector(".ingredient-list");
+  ingredientList.appendChild(newIngredient);
+
+  totalStepIngredientFormsInput.value = ingredientIndex + 1;
+}
+
+function removeIngredient(stepIndex) {
+  const stepItem = stepList.querySelector(`li[data-step-index="${stepIndex}"]`);
+  const ingredientList = stepItem.querySelector(".ingredient-list");
+  if (ingredientList.lastElementChild) {
+    ingredientList.lastElementChild.remove();
+    totalStepIngredientFormsInput.value =
+      parseInt(totalStepIngredientFormsInput.value) - 1;
+  }
+}
+
 // delegate add/remove ingredient action
 stepList.addEventListener("click", e => {
   if (e.target.matches(".add-ingredient")) {
     e.preventDefault();
     const stepIndex = e.target.getAttribute("data-step-index");
-    console.log(`Add ingredient to step ${stepIndex}`);
-    // TODO: implement add ingredient
+    addIngredient(stepIndex);
   }
 
   if (e.target.matches(".remove-ingredient")) {
     e.preventDefault();
     const stepIndex = e.target.getAttribute("data-step-index");
-    console.log(`Remove ingredient from step ${stepIndex}`);
-    // TODO: implement remove ingredient
+    removeIngredient(stepIndex);
   }
 });
