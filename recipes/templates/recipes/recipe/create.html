@@ -19,18 +19,25 @@
 
     <ol id="step-list">
       {% for form_step in form_steps %}
-        <li>{{ form_step.instruction }}</li>
-        <button class="remove-ingredient" type="button">-</button>
-        <button class="add-ingredient" type="button">+</button>
-        <ul>
-          {% for form_stepingr in form_stepingredients %}
-          <li>
-          {{ form_stepingr.ingredient }}
-          {{ form_stepingr.quantity }}
-          {{ form_stepingr.unit }}
-          </li>
-          {% endfor %}
-        </ul>
+        <li data-step-index="{{ forloop.counter0 }}">
+          {{ form_step.instruction }}
+          <button class="remove-ingredient" type="button">-</button>
+          <button class="add-ingredient" type="button">+</button>
+          <ul class="ingredient-list">
+            {% for form_stepingr in form_stepingredients %}
+            <li>
+              <input
+                type="hidden"
+                name="stepingr-{{ forloop.counter0 }}-stepindex"
+                value="{{ forloop.parentloop.counter0 }}"
+              >
+              {{ form_stepingr.ingredient }}
+              {{ form_stepingr.quantity }}
+              {{ form_stepingr.unit }}
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
       {% endfor %}
     </ol>
 
@@ -41,14 +48,22 @@
 <a href="{% url 'recipe_list' %}">Cancel</a>
 
 <li id="step-template" style="display: none;">
-{{ form_steps.empty_form.instruction }}
+  {{ form_steps.empty_form.instruction }}
+  <button class="remove-ingredient" type="button">-</button>
+  <button class="add-ingredient" type="button">+</button>
+  <ul class="ingredient-list"></ul>
 </li>
 
-<ul id="step-ingredient-template" style="display: none;">
-  <li>{{ form_step_ingredients.empty_form.ingredient }}</li>
-  <li>{{ form_step_ingredients.empty_form.quantity }}</li>
-  <li>{{ form_step_ingredients.empty_form.unit }}</li>
-</ul>
+<li id="step-ingredient-template" style="display: none;">
+  <input
+    type="hidden"
+    name="stepingr-__prefix__-stepindex"
+    value="__stepIndex__"
+  >
+  {{ form_stepingredients.empty_form.ingredient }}
+  {{ form_stepingredients.empty_form.quantity }}
+  {{ form_stepingredients.empty_form.unit }}
+</li>
 
 {% endblock %}
 

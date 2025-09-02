@@ -63,6 +63,11 @@ def recipe_create(request):
                 step.order_id = i
                 step.save()
 
+            # stepingredients = form_stepingredients.save(commit=False)
+            # TODO: process step-ingredients
+            # for i, stepingr in enumerate(stepingredients):
+            # pass
+
             return redirect("recipe_detail", recipe_slug=recipe.slug)
     else:
         form = RecipeCreateForm()
