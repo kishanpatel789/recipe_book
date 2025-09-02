@@ -18,22 +18,22 @@
     {{ form_stepingredients.management_form }}
 
     <ol id="step-list">
-      {% for form_step in form_steps %}
+      {% for step in form_steps %}
         <li data-step-index="{{ forloop.counter0 }}">
-          {{ form_step.instruction }}
+          {{ step.instruction }}
           <button class="remove-ingredient" type="button">-</button>
           <button class="add-ingredient" type="button">+</button>
           <ul class="ingredient-list">
-            {% for form_stepingr in form_stepingredients %}
+            {% for stepingr in form_stepingredients %}
             <li>
               <input
                 type="hidden"
-                name="stepingr-{{ forloop.counter0 }}-stepindex"
+                name="stepingr-{{ forloop.counter0 }}-step_index"
                 value="{{ forloop.parentloop.counter0 }}"
               >
-              {{ form_stepingr.ingredient }}
-              {{ form_stepingr.quantity }}
-              {{ form_stepingr.unit }}
+              {{ stepingr.ingredient }}
+              {{ stepingr.quantity }}
+              {{ stepingr.unit }}
             </li>
             {% endfor %}
           </ul>
@@ -57,7 +57,7 @@
 <li id="step-ingredient-template" style="display: none;">
   <input
     type="hidden"
-    name="stepingr-__prefix__-stepindex"
+    name="stepingr-__prefix__-step_index"
     value="__stepIndex__"
   >
   {{ form_stepingredients.empty_form.ingredient }}

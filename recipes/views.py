@@ -52,21 +52,45 @@ def recipe_create(request):
     if request.method == "POST":
         form = RecipeCreateForm(request.POST)
         form_steps = StepCreateFormSet(request.POST, prefix="step")
-        form_stepingredients = StepIngredientCreateFormSet(prefix="stepingr")
+        form_stepingredients = StepIngredientCreateFormSet(
+            request.POST, prefix="stepingr"
+        )
 
-        if form.is_valid() and form_steps.is_valid():
+        if all(
+            [form.is_valid(), form_steps.is_valid(), form_stepingredients.is_valid()]
+        ):
             recipe = form.save()
 
             steps = form_steps.save(commit=False)
+            step_map = {}
             for i, step in enumerate(steps):
                 step.recipe = recipe
                 step.order_id = i
                 step.save()
+                step_map[i] = step
 
-            # stepingredients = form_stepingredients.save(commit=False)
-            # TODO: process step-ingredients
-            # for i, stepingr in enumerate(stepingredients):
-            # pass
+            step_index = 0
+            stepingr_order_id = 0
+            for ingr_form in form_stepingredients.cleaned_data:
+                if not ingr_form or ingr_form.get("ingredient") is None:
+                    continue
+
+                form_step_index = int(ingr_form["step_index"])
+                if form_step_index != step_index:
+                    step_index = form_step_index
+                    stepingr_order_id = 0
+
+                step_instance = step_map.get(form_step_index)
+
+                StepIngredient.objects.create(
+                    step=step_instance,
+                    ingredient=ingr_form["ingredient"],
+                    order_id=stepingr_order_id,
+                    quantity=ingr_form["quantity"],
+                    unit=ingr_form["unit"],
+                )
+
+                stepingr_order_id += 1
 
             return redirect("recipe_detail", recipe_slug=recipe.slug)
     else:
