@@ -98,10 +98,16 @@ def recipe_create(request):
         form_steps = StepCreateFormSet(prefix="step")
         form_stepingredients = StepIngredientCreateFormSet(prefix="stepingr")
 
+    grouped_ingredients = {}
+    for ingr_form in form_stepingredients:
+        step_index = ingr_form["step_index"].value()
+        grouped_ingredients.setdefault(step_index, []).append(ingr_form)
+
     context = {
         "form": form,
         "form_steps": form_steps,
         "form_stepingredients": form_stepingredients,
+        "grouped_ingredients": grouped_ingredients,
     }
 
     return render(request, "recipes/recipe/create.html", context)
