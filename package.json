@@ -5,7 +5,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx @tailwindcss/cli -i ./mysite/static/css/input.css -o ./mysite/static/css/output.css",
-    "dev": "npx @tailwindcss/cli -i ./mysite/static/css/input.css -o ./mysite/static/css/output.css --watch"
+    "build": "npx @tailwindcss/cli -i ./recipes/static/recipes/css/input.css -o ./recipes/static/recipes/css/output.css",
+    "dev": "npx @tailwindcss/cli -i ./recipes/static/recipes/css/input.css -o ./recipes/static/recipes/css/output.css --watch"
   }
 }

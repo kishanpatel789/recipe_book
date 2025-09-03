@@ -6,7 +6,7 @@
 <h1 class="text-7xl mb-2">{{ recipe.name }}</h1>
 
 <div id="tags">
-    <span class="text-sm pl-2">
+    <span class="text-sm pl-2 text-recbksec">
         {% for tag in recipe.tags.all %}
         #{{tag.slug}}
         {% endfor %}
@@ -92,7 +92,7 @@
 </div>
 {% endif %}
 
-<hr>
+<hr class="mt-6">
 
 <a href="{% url 'recipe_list' %}">Back to recipes</a>
 
