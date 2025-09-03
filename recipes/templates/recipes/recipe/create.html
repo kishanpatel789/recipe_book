@@ -1,5 +1,6 @@
 {% extends "recipes/base.html" %}
 {% load static %}
+{% load recipe_extras %}
 
 {% block title %}Create Recipe{% endblock %}
 
@@ -20,19 +21,24 @@
     <ol id="step-list">
       {% for step in form_steps %}
         <li data-step-index="{{ forloop.counter0 }}">
+          {{ step.non_field_errors }}
+          {{ step.instruction.errors }}
           {{ step.instruction }}
           <button class="remove-ingredient" type="button">-</button>
           <button class="add-ingredient" type="button">+</button>
           <ul class="ingredient-list">
-            {% for stepingr in form_stepingredients %}
+            {% for stepingr in grouped_ingredients|get_item:forloop.counter0 %}
             <li>
-              <input
-                type="hidden"
-                name="stepingr-{{ forloop.counter0 }}-step_index"
-                value="{{ forloop.parentloop.counter0 }}"
-              >
+              {{ stepingr.non_field_errors }}
+              {{ stepingr.step_index }}
+
+              {{ stepingr.ingredient.errors }}
               {{ stepingr.ingredient }}
+
+              {{ stepingr.quantity.errors }}
               {{ stepingr.quantity }}
+
+              {{ stepingr.unit.errors }}
               {{ stepingr.unit }}
             </li>
             {% endfor %}
