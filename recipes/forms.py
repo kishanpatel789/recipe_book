@@ -2,6 +2,7 @@ from django import forms
 from django.forms import (
     BaseInlineFormSet,
     HiddenInput,
+    formset_factory,
     inlineformset_factory,
 )
 
@@ -31,24 +32,28 @@ class RecipeCreateForm(forms.ModelForm):
         widgets = {"tags": forms.CheckboxSelectMultiple()}
 
 
+class StepIngredientForm(forms.ModelForm):
+    step_index = forms.IntegerField(widget=forms.HiddenInput)
+
+    class Meta:
+        model = StepIngredient
+        fields = ["ingredient", "quantity", "unit"]
+
+
 StepCreateFormSet = inlineformset_factory(
     Recipe,
     Step,
     fields=["instruction"],
-    # form=BaseStepFormSet,
-    # can_order=True,
     can_delete=False,
     min_num=1,
     extra=0,
     max_num=25,
 )
 
-StepIngredientCreateFormSet = inlineformset_factory(
-    Step,
-    StepIngredient,
-    fields=["ingredient", "quantity", "unit"],
+StepIngredientCreateFormSet = formset_factory(
+    StepIngredientForm,
     can_delete=False,
     min_num=0,
     extra=3,
-    max_num=10,
+    max_num=50,
 )
