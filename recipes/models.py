@@ -74,8 +74,8 @@ class StepIngredient(models.Model):
     step = models.ForeignKey(Step, related_name="ingredients", on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     order_id = models.SmallIntegerField()
-    quantity = models.FloatField(null=True)
-    unit = models.ForeignKey(Unit, null=True, on_delete=models.SET_NULL)
+    quantity = models.FloatField(null=True, blank=True)
+    unit = models.ForeignKey(Unit, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"{self.step.recipe.slug}/{self.step.order_id}/{self.order_id}"
