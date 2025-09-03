@@ -211,3 +211,4 @@ __marimo__/
 tmux_start.sh
 *.sqlite
 *.db
+node_modules/
