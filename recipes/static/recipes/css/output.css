@@ -193,6 +193,13 @@
   .mx-auto {
     margin-inline: auto;
   }
+  .hr {
+    margin-top: calc(var(--spacing) * 6);
+    height: 1px;
+    border-style: var(--tw-border-style);
+    border-width: 0px;
+    background-color: var(--color-gray-200);
+  }
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
@@ -202,8 +209,14 @@
   .mt-6 {
     margin-top: calc(var(--spacing) * 6);
   }
+  .mr-2 {
+    margin-right: calc(var(--spacing) * 2);
+  }
   .mb-2 {
     margin-bottom: calc(var(--spacing) * 2);
+  }
+  .mb-6 {
+    margin-bottom: calc(var(--spacing) * 6);
   }
   .ml-6 {
     margin-left: calc(var(--spacing) * 6);
@@ -248,6 +261,13 @@
   .hidden {
     display: none;
   }
+  .table {
+    display: table;
+  }
+  .size-6 {
+    width: calc(var(--spacing) * 6);
+    height: calc(var(--spacing) * 6);
+  }
   .h-5 {
     height: calc(var(--spacing) * 5);
   }
@@ -260,14 +280,26 @@
   .w-5 {
     width: calc(var(--spacing) * 5);
   }
+  .w-full {
+    width: 100%;
+  }
   .max-w-4xl {
     max-width: var(--container-4xl);
+  }
+  .flex-grow {
+    flex-grow: 1;
   }
   .grow {
     flex-grow: 1;
   }
   .table-auto {
     table-layout: auto;
+  }
+  .border-collapse {
+    border-collapse: collapse;
+  }
+  .resize {
+    resize: both;
   }
   .list-inside {
     list-style-position: inside;
@@ -289,6 +321,13 @@
   }
   .justify-center {
     justify-content: center;
+  }
+  .space-y-2 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse)));
+    }
   }
   .space-x-2 {
     :where(& > :not(:last-child)) {
@@ -341,6 +380,10 @@
       outline-style: none;
     }
   }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
   .border-0 {
     border-style: var(--tw-border-style);
     border-width: 0px;
@@ -354,11 +397,17 @@
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
   }
+  .pr-2 {
+    padding-right: calc(var(--spacing) * 2);
+  }
   .pr-4 {
     padding-right: calc(var(--spacing) * 4);
   }
   .pl-2 {
     padding-left: calc(var(--spacing) * 2);
+  }
+  .text-center {
+    text-align: center;
   }
   .align-middle {
     vertical-align: middle;
@@ -395,6 +444,13 @@
   .text-recbksec {
     color: var(--color-recbksec);
   }
+  .underline {
+    text-decoration-line: underline;
+  }
+  .outline {
+    outline-style: var(--tw-outline-style);
+    outline-width: 1px;
+  }
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
@@ -409,9 +465,19 @@
     }
   }
 }
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
 @property --tw-font-weight {
   syntax: "*";
   inherits: false;
+}
+@property --tw-space-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
 }
 @property --tw-space-x-reverse {
   syntax: "*";
@@ -422,11 +488,6 @@
   syntax: "*";
   inherits: false;
   initial-value: 0;
-}
-@property --tw-border-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
 }
 @property --tw-shadow {
   syntax: "*";
@@ -493,6 +554,11 @@
   inherits: false;
   initial-value: 0 0 #0000;
 }
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
 @property --tw-blur {
   syntax: "*";
   inherits: false;
@@ -549,10 +615,11 @@
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
+      --tw-border-style: solid;
       --tw-font-weight: initial;
+      --tw-space-y-reverse: 0;
       --tw-space-x-reverse: 0;
       --tw-divide-y-reverse: 0;
-      --tw-border-style: solid;
       --tw-shadow: 0 0 #0000;
       --tw-shadow-color: initial;
       --tw-shadow-alpha: 100%;
@@ -567,6 +634,7 @@
       --tw-ring-offset-width: 0px;
       --tw-ring-offset-color: #fff;
       --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-outline-style: solid;
       --tw-blur: initial;
       --tw-brightness: initial;
       --tw-contrast: initial;

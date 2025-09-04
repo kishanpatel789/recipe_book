@@ -1,16 +1,10 @@
 from django import forms
 from django.forms import (
-    BaseInlineFormSet,
-    HiddenInput,
     formset_factory,
     inlineformset_factory,
 )
 
 from .models import Ingredient, Recipe, Step, StepIngredient
-
-
-class BaseStepFormSet(BaseInlineFormSet):
-    ordering_widget = HiddenInput
 
 
 class IngredientCreateForm(forms.ModelForm):
@@ -29,7 +23,10 @@ class RecipeCreateForm(forms.ModelForm):
     class Meta:
         model = Recipe
         fields = ["name", "tags", "complementary"]
-        widgets = {"tags": forms.CheckboxSelectMultiple()}
+        widgets = {
+            "name": forms.TextInput(attrs={"placeholder": "Recipe name"}),
+            "tags": forms.CheckboxSelectMultiple(),
+        }
 
 
 class StepIngredientForm(forms.ModelForm):

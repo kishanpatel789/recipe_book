@@ -2,11 +2,14 @@
 
 {% block content %}
 
-<h1 class="text-3xl mt-6 mb-2">Recipe Book</h1>
+<div class="h-screen flex flex-col items-center justify-center text-center">
 
-<ul>
-  <li><a href="{% url 'recipe_list' %}">View Recipes</a></li>
-  <li><a href="{% url 'ingredient_list' %}">Manage Ingredients</a></li>
-</ul>
+  <h1 class="text-3xl mb-6">Recipe Book</h1>
 
+  <ul class="space-y-2">
+    <li><a href="{% url 'recipe_list' %}">View Recipes</a></li>
+    <li><a href="{% url 'ingredient_list' %}">Manage Ingredients</a></li>
+  </ul>
+
+</div>
 {% endblock %}

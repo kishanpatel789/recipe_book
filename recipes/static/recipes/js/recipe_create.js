@@ -71,13 +71,15 @@ function removeIngredient(stepIndex) {
 
 // delegate add/remove ingredient action
 stepList.addEventListener("click", e => {
-  if (e.target.matches(".add-ingredient")) {
+  const addBtn = e.target.closest(".add-ingredient");
+  if (addBtn) {
     e.preventDefault();
     const stepIndex = e.target.closest("li").getAttribute("data-step-index");
     addIngredient(stepIndex);
   }
 
-  if (e.target.matches(".remove-ingredient")) {
+  const removeBtn = e.target.closest(".remove-ingredient");
+  if (removeBtn) {
     e.preventDefault();
     const stepIndex = e.target.closest("li").getAttribute("data-step-index");
     removeIngredient(stepIndex);

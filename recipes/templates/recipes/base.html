@@ -13,13 +13,9 @@
 
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' class="flex flex-col h-screen text-recbk font-questrial">
 
-    <main class="grow">
-      {% block main %}
-      <div class="max-w-4xl mx-auto p-2">
+    <main class="grow w-full max-w-4xl mx-auto p-2">
         {% block content %}
         {% endblock %}
-      </div>
-      {% endblock %}
     </main>
 
     {% block scripts %}
