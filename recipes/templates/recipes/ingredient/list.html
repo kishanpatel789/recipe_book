@@ -1,7 +1,7 @@
 {% extends "recipes/base.html" %}
 
 {% block content %}
-<h1>Ingredients</h1>
+<h1 class="text-3xl mt-6 mb-2">Ingredients</h1>
 
 <div id="ingredient-create-container">
   {% include "recipes/ingredient/_create_button.html" %}
@@ -11,21 +11,24 @@
 <p class="text-gray-600 mt-4">No ingredients to show.</p>
 {% endif %}
 
-<table>
+<table class="table-auto mt-2">
   <thead>
     <tr>
       <th></th>
       <th></th>
     </tr>
   </thead>
-  <tbody id="ingredient-table-body" hx-target="closest tr" hx-swap="outerHTML">
+  <tbody id="ingredient-table-body"
+    hx-target="closest tr" hx-swap="outerHTML"
+    class="divide-y divide-gray-200"
+    >
     {% for ingr in ingredients %}
     {% include "recipes/ingredient/_list_item.html" %}
     {% endfor %}
   </tbody>
 </table>
 
-<hr>
+<hr class="mt-6">
 
 <a href="{% url 'index' %}">Go home</a>
 

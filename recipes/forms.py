@@ -54,6 +54,6 @@ StepIngredientCreateFormSet = formset_factory(
     StepIngredientForm,
     can_delete=False,
     min_num=0,
-    extra=3,
+    extra=0,
     max_num=50,
 )

@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.12",
+    "tailwindcss": "^4.1.12"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx @tailwindcss/cli -i ./recipes/static/recipes/css/input.css -o ./recipes/static/recipes/css/output.css",
+    "dev": "npx @tailwindcss/cli -i ./recipes/static/recipes/css/input.css -o ./recipes/static/recipes/css/output.css --watch"
+  }
+}
