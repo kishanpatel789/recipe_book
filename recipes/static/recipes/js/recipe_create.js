@@ -17,7 +17,6 @@ function addStep() {
     newStep.removeAttribute("id")
     newStep.style.display = "";  // make visible
     newStep.innerHTML = newStep.innerHTML.replace(/__prefix__/g, stepIndex);
-
     newStep.dataset.stepIndex = stepIndex;
 
     stepList.appendChild(newStep);

@@ -25,7 +25,7 @@
 
     <hr class="hr">
 
-    <div class="flex flex-row items-center mt-2">
+    <div class="flex flex-row items-center my-2">
       <h2 class="text-2xl pr-2">Steps</h2>
       <div class="flex flex-row items-center justify-center space-x-2">
         <button id="remove-step" type="button" class="btn-icon">
@@ -40,32 +40,34 @@
     {{ form_steps.management_form }}
     {{ form_stepingredients.management_form }}
 
-    <ol id="step-list">
+    <ol id="step-list" class="list-decimal list-outside ml-4">
       {% for step in form_steps %}
         <li data-step-index="{{ forloop.counter0 }}">
-            {{ step.non_field_errors }}
-            {{ step.instruction.errors }}
-            {{ step.instruction|add_class:'form-input' }}
+          <div class="flex flex-row items-center justify-center space-x-2">
+          {{ step.non_field_errors }}
+          {{ step.instruction.errors }}
+          {{ step.instruction|add_class:'form-input grow ml-2' }}
           <button class="remove-ingredient btn-icon" type="button">
             {% include "recipes/icons/remove.html" %}
           </button>
           <button class="add-ingredient btn-icon" type="button">
             {% include "recipes/icons/add.html" %}
           </button>
-          <ul class="ingredient-list">
+          </div>
+          <ul class="ingredient-list list-disc list-outside ml-8">
             {% for stepingr in grouped_ingredients|get_item:forloop.counter0 %}
             <li>
               {{ stepingr.non_field_errors }}
               {{ stepingr.step_index }}
 
               {{ stepingr.ingredient.errors }}
-              {{ stepingr.ingredient }}
+              {{ stepingr.ingredient|add_class:'form-select' }}
 
               {{ stepingr.quantity.errors }}
-              {{ stepingr.quantity }}
+              {{ stepingr.quantity|add_class:'form-select' }}
 
               {{ stepingr.unit.errors }}
-              {{ stepingr.unit }}
+              {{ stepingr.unit|add_class:'form-select' }}
             </li>
             {% endfor %}
           </ul>
@@ -74,7 +76,7 @@
     </ol>
 
 
-    <input type="submit" value="Create Recipe" class="btn">
+    <input type="submit" value="Create Recipe" class="btn mt-6">
 </form>
 
 <hr class="hr">
@@ -82,10 +84,16 @@
 <a href="{% url 'recipe_list' %}">Cancel</a>
 
 <li id="step-template" style="display: none;">
-  {{ form_steps.empty_form.instruction }}
-  <button class="remove-ingredient" type="button">-</button>
-  <button class="add-ingredient" type="button">+</button>
-  <ul class="ingredient-list"></ul>
+  <div class="flex flex-row items-center justify-center space-x-2">
+    {{ form_steps.empty_form.instruction|add_class:'form-input grow ml-2' }}
+    <button class="remove-ingredient btn-icon" type="button">
+      {% include "recipes/icons/remove.html" %}
+    </button>
+    <button class="add-ingredient btn-icon" type="button">
+      {% include "recipes/icons/add.html" %}
+    </button>
+  </div>
+  <ul class="ingredient-list list-disc list-outside ml-8"></ul>
 </li>
 
 <li id="step-ingredient-template" style="display: none;">
@@ -94,9 +102,9 @@
     name="stepingr-__prefix__-step_index"
     value="__stepIndex__"
   >
-  {{ form_stepingredients.empty_form.ingredient }}
-  {{ form_stepingredients.empty_form.quantity }}
-  {{ form_stepingredients.empty_form.unit }}
+  {{ form_stepingredients.empty_form.ingredient|add_class:'form-select' }}
+  {{ form_stepingredients.empty_form.quantity|add_class:'form-input' }}
+  {{ form_stepingredients.empty_form.unit|add_class:'form-select' }}
 </li>
 
 {% endblock %}
