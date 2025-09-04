@@ -1,18 +1,26 @@
-{{ form.non_field_errors }}
-{{ form.name.errors }}
-<input autofocus name="name" value="{{ form.name.value }}">
-<button
-    hx-get="{% url 'htmx_ingredient_create' %}{% querystring action='cancel' %}"
-    hx-target="#ingredient-create-container"
-    hx-swap="innerHTML"
-    >
-    Cancel
-</button>
-<button
-  hx-post="{% url 'htmx_ingredient_create' %}"
-  hx-include="closest div"
-  hx-target="#ingredient-create-container"
-  hx-swap="innerHTML"
-  >
-  Create
-</button>
+<div class="flex flex-row">
+  <div class="pr-4 py-2">
+    {{ form.non_field_errors }}
+    {{ form.name.errors }}
+    <input autofocus name="name" value="{{ form.name.value }}" class="form-input">
+  </div>
+    <span class="flex flex-row items-center justify-center p-2 space-x-2">
+      <button
+          hx-get="{% url 'htmx_ingredient_create' %}{% querystring action='cancel' %}"
+          hx-target="#ingredient-create-container"
+          hx-swap="innerHTML"
+          class="btn-icon"
+          >
+          {% include "recipes/icons/cancel.html" %}
+      </button>
+        <button
+            hx-post="{% url 'htmx_ingredient_create' %}"
+            hx-include="closest div"
+            hx-target="#ingredient-create-container"
+            hx-swap="innerHTML"
+            class="btn-icon"
+            >
+            {% include "recipes/icons/confirm.html" %}
+        </button>
+    </span>
+  </div>
