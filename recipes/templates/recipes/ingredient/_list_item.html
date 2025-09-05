@@ -1,13 +1,18 @@
 <tr>
-  <td class="pr-4">{{ ingr.name }}</td>
-  <td>
-    <button hx-get="{% url 'htmx_ingredient_edit' ingr.id %}">
-      Edit
+  <td class="pr-4 py-2">{{ ingr.name }}</td>
+  <td class="flex flex-row items-center justify-center p-2 space-x-2">
+    <button
+      hx-get="{% url 'htmx_ingredient_edit' ingr.id %}"
+      class="btn-icon"
+      >
+      {% include "recipes/icons/edit.html" %}
     </button>
     <button
-        hx-confirm="Are you sure you want to delete '{{ ingr.name }}'?"
-        hx-delete="{% url 'htmx_ingredient_delete' ingr.id %}">
-      Delete
+      hx-confirm="Are you sure you want to delete '{{ ingr.name }}'?"
+      hx-delete="{% url 'htmx_ingredient_delete' ingr.id %}"
+      class="btn-icon"
+      >
+      {% include "recipes/icons/delete.html" %}
     </button>
   </td>
 </tr>
