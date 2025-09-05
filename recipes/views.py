@@ -1,4 +1,4 @@
-from django.db.models import F, Min, Sum
+from django.db.models import F, Min, Prefetch, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
@@ -10,7 +10,7 @@ from .forms import (
     StepCreateFormSet,
     StepIngredientCreateFormSet,
 )
-from .models import Ingredient, Recipe, StepIngredient
+from .models import Ingredient, Recipe, Step, StepIngredient
 
 
 def index(request):
@@ -24,7 +24,26 @@ def recipe_list(request):
 
 
 def recipe_detail(request, recipe_slug):
-    recipe = get_object_or_404(Recipe, slug=recipe_slug)
+    recipe_qs = (
+        Recipe.objects.prefetch_related("tags")
+        .prefetch_related("complementary")
+        .prefetch_related(
+            Prefetch(
+                "steps",
+                queryset=Step.objects.prefetch_related(
+                    Prefetch(
+                        "ingredients",
+                        queryset=StepIngredient.objects.select_related(
+                            "ingredient", "unit"
+                        ),
+                    )
+                ),
+            )
+        )
+        .filter(slug=recipe_slug)
+    )
+    recipe = get_object_or_404(recipe_qs)
+
     ingredients = (
         StepIngredient.objects.filter(step__recipe__slug=recipe_slug)
         .values(
@@ -41,10 +60,12 @@ def recipe_detail(request, recipe_slug):
         .order_by("order_id")
     ).all()
 
+    context = {"recipe": recipe, "ingredients": ingredients}
+
     return render(
         request,
         "recipes/recipe/detail.html",
-        {"recipe": recipe, "ingredients": ingredients},
+        context,
     )
 
 
