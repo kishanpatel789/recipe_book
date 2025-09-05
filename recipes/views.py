@@ -1,7 +1,7 @@
 from django.db.models import F, Min, Prefetch, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 
 from .forms import (
     IngredientCreateForm,
@@ -60,7 +60,10 @@ def recipe_detail(request, recipe_slug):
         .order_by("order_id")
     ).all()
 
-    context = {"recipe": recipe, "ingredients": ingredients}
+    # TODO: lock this to chef role after user model is extended
+    edit_mode = request.GET.get("action", "") == "edit"
+
+    context = {"recipe": recipe, "ingredients": ingredients, "edit_mode": edit_mode}
 
     return render(
         request,
@@ -135,6 +138,16 @@ def recipe_create(request):
 
 
 def recipe_edit(request): ...
+
+
+# TODO: lock this to user chef role only
+@require_POST
+def recipe_delete(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk)
+
+    if request.POST:
+        recipe.delete()
+        return redirect("recipe_list")
 
 
 def ingredient_list(request):

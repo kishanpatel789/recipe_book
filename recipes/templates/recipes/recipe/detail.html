@@ -17,7 +17,16 @@
     <h2 class="text-3xl mt-6 mb-2">Directions</h2>
     <ol class="list-decimal list-inside">
         {% for step in recipe.steps.all %}
-        <li>{{ step.instruction }}</li>
+        <li>
+          {{ step.instruction }}
+          {% if edit_mode %}
+            <button
+              class="btn-icon"
+              >
+              {% include "recipes/icons/edit.html" %}
+            </button>
+          {% endif %}
+        </li>
 
         <ul class="list-disc list-inside ml-6">
             {% for item in step.ingredients.all %}
@@ -41,6 +50,14 @@
                 {% else %}
                 {{ item.unit.name }}
                 {% endif %}
+                {% endif %}
+
+                {% if edit_mode %}
+                  <button
+                    class="btn-icon"
+                    >
+                    {% include "recipes/icons/edit.html" %}
+                  </button>
                 {% endif %}
             </li>
             {% endfor %}
@@ -93,6 +110,22 @@
     </ul>
 </div>
 {% endif %}
+
+<div class="flex flex-row items-center justify-left mt-6 space-x-4">
+  {% if edit_mode %}
+    <a href="{% url 'recipe_detail' recipe.slug %}" class="btn">Cancel</a>
+    <form
+      method="POST"
+      action="{% url 'recipe_delete' recipe.id %}"
+      onsubmit="return confirm('Are you sure you want to delete \'{{ recipe.name }}\'?');"
+      >
+      {% csrf_token %}
+      <button type="submit" class="btn">Delete Recipe</button>
+    </form>
+  {% else %}
+    <a href="{% url 'recipe_detail' recipe.slug %}{% querystring action='edit' %}" class="btn">Edit</a>
+  {% endif %}
+</div>
 
 <hr class="hr">
 
