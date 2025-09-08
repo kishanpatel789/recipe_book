@@ -1,7 +1,7 @@
-from django.db.models import F, Min, Sum
+from django.db.models import F, Min, Prefetch, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 
 from .forms import (
     IngredientCreateForm,
@@ -10,7 +10,7 @@ from .forms import (
     StepCreateFormSet,
     StepIngredientCreateFormSet,
 )
-from .models import Ingredient, Recipe, StepIngredient
+from .models import Ingredient, Recipe, Step, StepIngredient
 
 
 def index(request):
@@ -24,7 +24,27 @@ def recipe_list(request):
 
 
 def recipe_detail(request, recipe_slug):
-    recipe = get_object_or_404(Recipe, slug=recipe_slug)
+    recipe_qs = (
+        Recipe.objects.prefetch_related("tags")
+        .prefetch_related("complementary")
+        .prefetch_related(
+            Prefetch(
+                "steps",
+                queryset=Step.objects.prefetch_related(
+                    Prefetch(
+                        "ingredients",
+                        queryset=StepIngredient.objects.select_related(
+                            "ingredient", "unit"
+                        ),
+                    )
+                ),
+            )
+        )
+        .filter(slug=recipe_slug)
+        .only("id", "name", "slug")
+    )
+    recipe = get_object_or_404(recipe_qs)
+
     ingredients = (
         StepIngredient.objects.filter(step__recipe__slug=recipe_slug)
         .values(
@@ -41,10 +61,15 @@ def recipe_detail(request, recipe_slug):
         .order_by("order_id")
     ).all()
 
+    # TODO: lock this to chef role after user model is extended
+    edit_mode = request.GET.get("action", "") == "edit"
+
+    context = {"recipe": recipe, "ingredients": ingredients, "edit_mode": edit_mode}
+
     return render(
         request,
         "recipes/recipe/detail.html",
-        {"recipe": recipe, "ingredients": ingredients},
+        context,
     )
 
 
@@ -114,6 +139,16 @@ def recipe_create(request):
 
 
 def recipe_edit(request): ...
+
+
+# TODO: lock this to user chef role only
+@require_POST
+def recipe_delete(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk)
+
+    if request.POST:
+        recipe.delete()
+        return redirect("recipe_list")
 
 
 def ingredient_list(request):
