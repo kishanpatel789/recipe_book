@@ -41,6 +41,7 @@ def recipe_detail(request, recipe_slug):
             )
         )
         .filter(slug=recipe_slug)
+        .only("id", "name", "slug")
     )
     recipe = get_object_or_404(recipe_qs)
 
