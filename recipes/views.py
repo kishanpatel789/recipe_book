@@ -11,11 +11,12 @@ from .forms import (
     StepCreateFormSet,
     StepIngredientCreateFormSet,
 )
+from .helpers import determine_is_chef
 from .models import Ingredient, Recipe, Step, StepIngredient
 
 
 def index(request):
-    is_chef = request.user.groups.filter(name="Chef").exists()
+    is_chef = determine_is_chef(request)
     context = {"is_chef": is_chef}
 
     return render(request, "recipes/index.html", context)
@@ -23,8 +24,13 @@ def index(request):
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
+    is_chef = determine_is_chef(request)
+    context = {
+        "recipes": recipes,
+        "is_chef": is_chef,
+    }
 
-    return render(request, "recipes/recipe/list.html", {"recipes": recipes})
+    return render(request, "recipes/recipe/list.html", context)
 
 
 def recipe_detail(request, recipe_slug):
@@ -65,10 +71,17 @@ def recipe_detail(request, recipe_slug):
         .order_by("order_id")
     ).all()
 
-    # TODO: lock this to chef role after user model is extended
-    edit_mode = request.GET.get("action", "") == "edit"
+    edit_mode = False
+    is_chef = determine_is_chef(request)
+    if is_chef:
+        edit_mode = request.GET.get("action", "") == "edit"
 
-    context = {"recipe": recipe, "ingredients": ingredients, "edit_mode": edit_mode}
+    context = {
+        "recipe": recipe,
+        "ingredients": ingredients,
+        "edit_mode": edit_mode,
+        "is_chef": is_chef,
+    }
 
     return render(
         request,
@@ -77,6 +90,7 @@ def recipe_detail(request, recipe_slug):
     )
 
 
+@permission_required("recipes.add_recipe")
 def recipe_create(request):
     if request.method == "POST":
         form = RecipeCreateForm(request.POST)
@@ -142,8 +156,8 @@ def recipe_create(request):
     return render(request, "recipes/recipe/create.html", context)
 
 
-# TODO: lock this to user chef role only
 @require_POST
+@permission_required("recipes.delete_recipe")
 def recipe_delete(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
 

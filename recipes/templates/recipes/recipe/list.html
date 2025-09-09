@@ -4,7 +4,9 @@
 
 <h1 class="text-3xl mt-6 mb-2">Recipes</h1>
 
-<a href="{% url 'recipe_create' %}" class="btn">+ Create Recipe</a>
+{% if is_chef %}
+  <a href="{% url 'recipe_create' %}" class="btn">+ Create Recipe</a>
+{% endif %}
 
 {% if recipes %}
 <ul class="mt-6">
