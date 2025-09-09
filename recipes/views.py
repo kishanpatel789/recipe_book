@@ -14,7 +14,10 @@ from .models import Ingredient, Recipe, Step, StepIngredient
 
 
 def index(request):
-    return render(request, "recipes/index.html")
+    is_chef = request.user.groups.filter(name="Chef").exists()
+    context = {"is_chef": is_chef}
+
+    return render(request, "recipes/index.html", context)
 
 
 def recipe_list(request):
