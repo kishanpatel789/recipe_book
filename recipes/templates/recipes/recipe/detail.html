@@ -15,10 +15,13 @@
 
 <div id="directions">
     <h2 class="text-3xl mt-6 mb-2">Directions</h2>
-    <ol class="list-decimal list-inside">
+    <ol class="list-decimal list-outside ml-4">
         {% for step in recipe.steps.all %}
         <li>
-          {{ step.instruction }}
+          <div class="flex flex-row items-center space-x-2">
+            <span>
+              {{ step.instruction }}
+            </span>
           {% if edit_mode %}
             <button
               class="btn-icon"
@@ -26,39 +29,44 @@
               {% include "recipes/icons/edit.html" %}
             </button>
           {% endif %}
+          </div>
         </li>
 
-        <ul class="list-disc list-inside ml-6">
+        <ul class="list-disc list-outside ml-6">
             {% for item in step.ingredients.all %}
             <li>
-                {{ item.ingredient.name }}
+              <div class="flex flex-row items-center space-x-2">
+                <span>
+                  {{ item.ingredient.name }}
 
-                {% if item.quantity %}
-                &ndash;
-                {{ item.quantity }}
-                {% endif %}
+                  {% if item.quantity %}
+                  &ndash;
+                  {{ item.quantity }}
+                  {% endif %}
 
-                {% if item.quantity != 1 %}
-                {% if item.unit.abbr_plural %}
-                {{ item.unit.abbr_plural }}
-                {% else %}
-                {{ item.unit.name_plural }}
-                {% endif %}
-                {% else %}
-                {% if item.unit.abbr_singular %}
-                {{ item.unit.abbr_singular }}
-                {% else %}
-                {{ item.unit.name }}
-                {% endif %}
-                {% endif %}
+                  {% if item.quantity != 1 %}
+                  {% if item.unit.abbr_plural %}
+                  {{ item.unit.abbr_plural }}
+                  {% else %}
+                  {{ item.unit.name_plural }}
+                  {% endif %}
+                  {% else %}
+                  {% if item.unit.abbr_singular %}
+                  {{ item.unit.abbr_singular }}
+                  {% else %}
+                  {{ item.unit.name }}
+                  {% endif %}
+                  {% endif %}
+                </span>
 
-                {% if edit_mode %}
-                  <button
-                    class="btn-icon"
-                    >
-                    {% include "recipes/icons/edit.html" %}
-                  </button>
-                {% endif %}
+                  {% if edit_mode %}
+                    <button
+                      class="btn-icon"
+                      >
+                      {% include "recipes/icons/edit.html" %}
+                    </button>
+                  {% endif %}
+              </div>
             </li>
             {% endfor %}
         </ul>
