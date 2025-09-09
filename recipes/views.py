@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import permission_required
 from django.db.models import F, Min, Prefetch, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -141,9 +142,6 @@ def recipe_create(request):
     return render(request, "recipes/recipe/create.html", context)
 
 
-def recipe_edit(request): ...
-
-
 # TODO: lock this to user chef role only
 @require_POST
 def recipe_delete(request, pk):
@@ -154,12 +152,14 @@ def recipe_delete(request, pk):
         return redirect("recipe_list")
 
 
+@permission_required("recipes.change_ingredient")
 def ingredient_list(request):
     ingredients = Ingredient.objects.all()
 
     return render(request, "recipes/ingredient/list.html", {"ingredients": ingredients})
 
 
+@permission_required("recipes.add_ingredient")
 def htmx_ingredient_create(request):
     if request.method == "POST":
         form = IngredientCreateForm(request.POST)
@@ -183,6 +183,7 @@ def htmx_ingredient_create(request):
             return render(request, "recipes/ingredient/_create.html", {"form": form})
 
 
+@permission_required("recipes.change_ingredient")
 def htmx_ingredient_edit(request, ingr_id):
     db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
 
@@ -211,6 +212,7 @@ def htmx_ingredient_edit(request, ingr_id):
 
 
 @require_http_methods(["DELETE"])
+@permission_required("recipes.delete_ingredient")
 def htmx_ingredient_delete(request, ingr_id):
     db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
     db_ingredient.delete()
