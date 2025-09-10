@@ -6,6 +6,9 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    favorites = models.ManyToManyField(
+        "recipes.Recipe", blank=True, related_name="favorited_by"
+    )
 
 
 @receiver(post_save, sender=User)

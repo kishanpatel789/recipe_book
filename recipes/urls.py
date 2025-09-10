@@ -34,4 +34,9 @@ urlpatterns = [
         views.htmx_ingredient_delete,
         name="htmx_ingredient_delete",
     ),
+    path(
+        "htmx/recipes/toggle_favorite/<int:recipe_id>/",
+        views.htmx_toggle_favorite,
+        name="htmx_toggle_favorite",
+    ),
 ]

@@ -5,7 +5,18 @@
 {% block content %}
 <h1 class="text-7xl mb-2">{{ recipe.name }}</h1>
 
-<div id="tags">
+<div id="tags" class="flex flex-row items-center">
+  <span
+    hx-post="{% url 'htmx_toggle_favorite' recipe.id %}"
+    class="cursor-pointer"
+    title="Toggle favorite"
+    >
+    {% if is_fav %}
+      {% include "recipes/icons/favorite.html" %}
+    {% else %}
+      {% include "recipes/icons/not_favorite.html" %}
+    {% endif %}
+  </span>
   <span class="text-sm pl-2 text-recbksec">
     {% for tag in recipe.tags.all %}
     #{{tag.slug}}

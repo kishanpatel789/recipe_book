@@ -77,12 +77,14 @@ def recipe_detail(request, recipe_slug):
     is_chef = determine_is_chef(request)
     if is_chef:
         edit_mode = request.GET.get("action", "") == "edit"
+    is_fav = recipe in request.user.profile.favorites.all()
 
     context = {
         "recipe": recipe,
         "ingredients": ingredients,
         "edit_mode": edit_mode,
         "is_chef": is_chef,
+        "is_fav": is_fav,
     }
 
     return render(
@@ -300,3 +302,16 @@ def htmx_ingredient_delete(request, ingr_id):
     db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
     db_ingredient.delete()
     return HttpResponse(status=200)
+
+
+@require_POST
+def htmx_toggle_favorite(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    profile = request.user.profile
+
+    if recipe in profile.favorites.all():
+        profile.favorites.remove(recipe)
+        return render(request, "recipes/icons/not_favorite.html")
+    else:
+        profile.favorites.add(recipe)
+        return render(request, "recipes/icons/favorite.html")
