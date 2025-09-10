@@ -6,134 +6,89 @@
 <h1 class="text-7xl mb-2">{{ recipe.name }}</h1>
 
 <div id="tags">
-    <span class="text-sm pl-2 text-recbksec">
-        {% for tag in recipe.tags.all %}
-        #{{tag.slug}}
-        {% endfor %}
-    </span>
+  <span class="text-sm pl-2 text-recbksec">
+    {% for tag in recipe.tags.all %}
+    #{{tag.slug}}
+    {% endfor %}
+  </span>
 </div>
 
 <div id="directions">
-    <h2 class="text-3xl mt-6 mb-2">Directions</h2>
-    <ol class="list-decimal list-outside ml-4">
-        {% for step in recipe.steps.all %}
-        <li>
-          <div class="flex flex-row items-center space-x-2">
-            <span>
-              {{ step.instruction }}
-            </span>
-          {% if edit_mode %}
-            <button
-              class="btn-icon"
-              >
-              {% include "recipes/icons/edit.html" %}
-            </button>
-          {% endif %}
-          </div>
-        </li>
+  <h2 class="text-3xl mt-6 mb-2">Directions</h2>
+  <ol class="list-decimal list-outside ml-4">
+    {% for step in recipe.steps.all %}
 
-        <ul class="list-disc list-outside ml-6">
-            {% for item in step.ingredients.all %}
-            <li>
-              <div class="flex flex-row items-center space-x-2">
-                <span>
-                  {{ item.ingredient.name }}
+    {% include "recipes/step/_list_item.html" %}
 
-                  {% if item.quantity %}
-                  &ndash;
-                  {{ item.quantity }}
-                  {% endif %}
-
-                  {% if item.quantity != 1 %}
-                  {% if item.unit.abbr_plural %}
-                  {{ item.unit.abbr_plural }}
-                  {% else %}
-                  {{ item.unit.name_plural }}
-                  {% endif %}
-                  {% else %}
-                  {% if item.unit.abbr_singular %}
-                  {{ item.unit.abbr_singular }}
-                  {% else %}
-                  {{ item.unit.name }}
-                  {% endif %}
-                  {% endif %}
-                </span>
-
-                  {% if edit_mode %}
-                    <button
-                      class="btn-icon"
-                      >
-                      {% include "recipes/icons/edit.html" %}
-                    </button>
-                  {% endif %}
-              </div>
-            </li>
-            {% endfor %}
-        </ul>
-        {% endfor %}
-    </ol>
+    <ul class="list-disc list-outside ml-6">
+      {% for item in step.ingredients.all %}
+      {% include "recipes/step_ingredient/_list_item.html" %}
+      {% endfor %}
+    </ul>
+    {% endfor %}
+  </ol>
 </div>
 
 
 <div id="ingredients">
-    <h2 class="text-3xl mt-6 mb-2">Ingredients</h2>
-        <ul class="list-disc list-inside">
-            {% for item in ingredients %}
-            <li>
-                {{ item.ingredient__name }}
+  <h2 class="text-3xl mt-6 mb-2">Ingredients</h2>
+  <ul class="list-disc list-inside">
+    {% for item in ingredients %}
+    <li>
+      {{ item.ingredient__name }}
 
-                {% if item.quantity %}
-                &ndash;
-                {{ item.quantity }}
-                {% endif %}
+      {% if item.quantity %}
+      &ndash;
+      {{ item.quantity }}
+      {% endif %}
 
-                {% if item.quantity != 1 %}
-                {% if item.unit__abbr_plural %}
-                {{ item.unit__abbr_plural }}
-                {% else %}
-                {{ item.unit__name_plural }}
-                {% endif %}
-                {% else %}
-                {% if item.unit__abbr_singular %}
-                {{ item.unit__abbr_singular }}
-                {% else %}
-                {{ item.unit__name }}
-                {% endif %}
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
+      {% if item.quantity != 1 %}
+      {% if item.unit__abbr_plural %}
+      {{ item.unit__abbr_plural }}
+      {% else %}
+      {{ item.unit__name_plural }}
+      {% endif %}
+      {% else %}
+      {% if item.unit__abbr_singular %}
+      {{ item.unit__abbr_singular }}
+      {% else %}
+      {{ item.unit__name }}
+      {% endif %}
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
 </div>
 
 
 {% if recipe.complementary.exists %}
 <div id="complementaryDishes">
-    <h2 class="text-2xl mt-6 mb-2">Complementary Dishes</h2>
-    <ul>
-        {% for comp in recipe.complementary.all %}
-        <li>
-            <a href="{% url 'recipe_detail' comp.slug %}">{{ comp.name }}</a>
-        </li>
-        {% endfor %}
-    </ul>
+  <h2 class="text-2xl mt-6 mb-2">Complementary Dishes</h2>
+  <ul>
+    {% for comp in recipe.complementary.all %}
+    <li>
+      <a href="{% url 'recipe_detail' comp.slug %}">{{ comp.name }}</a>
+    </li>
+    {% endfor %}
+  </ul>
 </div>
 {% endif %}
 
 <div class="flex flex-row items-center justify-left mt-6 space-x-4">
   {% if edit_mode %}
-    <a href="{% url 'recipe_detail' recipe.slug %}" class="btn">Cancel</a>
-    <form
+  <a href="{% url 'recipe_detail' recipe.slug %}" class="btn">Cancel</a>
+  <form
       method="POST"
       action="{% url 'recipe_delete' recipe.id %}"
       onsubmit="return confirm('Are you sure you want to delete \'{{ recipe.name }}\'?');"
       >
       {% csrf_token %}
       <button type="submit" class="btn">Delete Recipe</button>
-    </form>
+  </form>
   {% else %}
-    {% if is_chef %}
-      <a href="{% url 'recipe_detail' recipe.slug %}{% querystring action='edit' %}" class="btn">Edit</a>
-    {% endif %}
+  {% if is_chef %}
+  <a href="{% url 'recipe_detail' recipe.slug %}{% querystring action='edit' %}" class="btn">Edit</a>
+  {% endif %}
   {% endif %}
 </div>
 

@@ -1,0 +1,34 @@
+<li>
+  <div class="flex flex-row items-center space-x-2">
+    <span>
+      {{ item.ingredient.name }}
+
+      {% if item.quantity %}
+      &ndash;
+      {{ item.quantity }}
+      {% endif %}
+
+      {% if item.quantity != 1 %}
+      {% if item.unit.abbr_plural %}
+      {{ item.unit.abbr_plural }}
+      {% else %}
+      {{ item.unit.name_plural }}
+      {% endif %}
+      {% else %}
+      {% if item.unit.abbr_singular %}
+      {{ item.unit.abbr_singular }}
+      {% else %}
+      {{ item.unit.name }}
+      {% endif %}
+      {% endif %}
+    </span>
+
+    {% if edit_mode %}
+    <button
+        class="btn-icon"
+        >
+        {% include "recipes/icons/edit.html" %}
+    </button>
+      {% endif %}
+  </div>
+</li>

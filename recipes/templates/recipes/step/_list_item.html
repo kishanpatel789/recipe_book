@@ -1,0 +1,14 @@
+<li>
+  <div class="flex flex-row items-center space-x-2">
+    <span>
+      {{ step.instruction }}
+    </span>
+    {% if edit_mode %}
+    <button
+        class="btn-icon"
+        >
+        {% include "recipes/icons/edit.html" %}
+    </button>
+      {% endif %}
+  </div>
+</li>
