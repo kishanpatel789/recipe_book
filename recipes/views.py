@@ -9,6 +9,7 @@ from .forms import (
     IngredientEditForm,
     RecipeCreateForm,
     StepCreateFormSet,
+    StepEditForm,
     StepIngredientCreateFormSet,
 )
 from .helpers import determine_is_chef
@@ -164,6 +165,43 @@ def recipe_delete(request, pk):
     if request.POST:
         recipe.delete()
         return redirect("recipe_list")
+
+
+@permission_required("recipes.change_step")
+def htmx_step_edit(request, step_id):
+    db_step = get_object_or_404(Step, id=step_id)
+
+    if request.method == "POST":
+        form = StepEditForm(request.POST, instance=db_step)
+        if form.is_valid():
+            db_step.instruction = form.cleaned_data["instruction"]
+            db_step.save()
+            context = {
+                "step": db_step,
+                "edit_mode": True,
+            }
+            return render(request, "recipes/step/_list_item.html", context)
+        else:
+            # return form with errors
+            context = {"step": db_step, "form": form}
+            return render(request, "recipes/step/_edit.html", context)
+
+    if request.method == "GET":
+        if request.GET.get("action", "") == "cancel":
+            context = {
+                "step": db_step,
+                "edit_mode": True,
+            }
+            return render(request, "recipes/step/_list_item.html", context)
+        else:
+            form = StepEditForm(instance=db_step)
+            context = {"step": db_step, "form": form}
+            return render(request, "recipes/step/_edit.html", context)
+
+
+@permission_required("recipes.change_stepingredient")
+def htmx_step_ingredient_edit(request, step_id):
+    pass
 
 
 @permission_required("recipes.change_ingredient")

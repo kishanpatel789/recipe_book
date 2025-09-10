@@ -15,7 +15,8 @@
 
 <div id="directions">
   <h2 class="text-3xl mt-6 mb-2">Directions</h2>
-  <ol class="list-decimal list-outside ml-4">
+  <ol class="list-decimal list-outside ml-4"
+    hx-target="closest li" hx-swap="outerHTML">
     {% for step in recipe.steps.all %}
 
     {% include "recipes/step/_list_item.html" %}

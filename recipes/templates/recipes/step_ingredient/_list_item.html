@@ -9,17 +9,17 @@
       {% endif %}
 
       {% if item.quantity != 1 %}
-      {% if item.unit.abbr_plural %}
-      {{ item.unit.abbr_plural }}
+        {% if item.unit.abbr_plural %}
+          {{ item.unit.abbr_plural }}
+        {% else %}
+          {{ item.unit.name_plural }}
+        {% endif %}
       {% else %}
-      {{ item.unit.name_plural }}
-      {% endif %}
-      {% else %}
-      {% if item.unit.abbr_singular %}
-      {{ item.unit.abbr_singular }}
-      {% else %}
-      {{ item.unit.name }}
-      {% endif %}
+        {% if item.unit.abbr_singular %}
+          {{ item.unit.abbr_singular }}
+        {% else %}
+          {{ item.unit.name }}
+        {% endif %}
       {% endif %}
     </span>
 

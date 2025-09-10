@@ -6,6 +6,7 @@
     {% if edit_mode %}
     <button
         class="btn-icon"
+        hx-get="{% url 'htmx_step_edit' step.id %}"
         >
         {% include "recipes/icons/edit.html" %}
     </button>

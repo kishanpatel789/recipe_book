@@ -7,17 +7,17 @@
   <td>
     <div class="flex items-center justify-center p-2 space-x-2">
       <button
-         hx-get="{% url 'htmx_ingredient_edit' ingr.id %}{% querystring action='cancel' %}"
-         class="btn-icon"
-         >
-         {% include "recipes/icons/cancel.html" %}
+          hx-get="{% url 'htmx_ingredient_edit' ingr.id %}{% querystring action='cancel' %}"
+          class="btn-icon"
+          >
+          {% include "recipes/icons/cancel.html" %}
       </button>
       <button
-        hx-post="{% url 'htmx_ingredient_edit' ingr.id %}"
-        hx-include="closest tr"
-        class="btn-icon"
-      >
-      {% include "recipes/icons/confirm.html" %}
+          hx-post="{% url 'htmx_ingredient_edit' ingr.id %}"
+          hx-include="closest tr"
+          class="btn-icon"
+          >
+          {% include "recipes/icons/confirm.html" %}
       </button>
     </div>
   </td>

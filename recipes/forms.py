@@ -54,3 +54,9 @@ StepIngredientCreateFormSet = formset_factory(
     extra=0,
     max_num=50,
 )
+
+
+class StepEditForm(forms.ModelForm):
+    class Meta:
+        model = Step
+        fields = ["instruction"]
