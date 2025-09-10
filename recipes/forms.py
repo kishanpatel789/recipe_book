@@ -29,7 +29,7 @@ class RecipeCreateForm(forms.ModelForm):
         }
 
 
-class StepIngredientForm(forms.ModelForm):
+class StepIngredientCreateForm(forms.ModelForm):
     step_index = forms.IntegerField(widget=forms.HiddenInput)
 
     class Meta:
@@ -48,7 +48,7 @@ StepCreateFormSet = inlineformset_factory(
 )
 
 StepIngredientCreateFormSet = formset_factory(
-    StepIngredientForm,
+    StepIngredientCreateForm,
     can_delete=False,
     min_num=0,
     extra=0,
@@ -60,3 +60,9 @@ class StepEditForm(forms.ModelForm):
     class Meta:
         model = Step
         fields = ["instruction"]
+
+
+class StepIngredientEditForm(forms.ModelForm):
+    class Meta:
+        model = StepIngredient
+        fields = ["ingredient", "quantity", "unit"]

@@ -1,24 +1,24 @@
 <li>
   <div class="flex flex-row items-center space-x-2">
     <span>
-      {{ item.ingredient.name }}
+      {{ stepingr.ingredient.name }}
 
-      {% if item.quantity %}
+      {% if stepingr.quantity %}
       &ndash;
-      {{ item.quantity }}
+      {{ stepingr.quantity }}
       {% endif %}
 
-      {% if item.quantity != 1 %}
-        {% if item.unit.abbr_plural %}
-          {{ item.unit.abbr_plural }}
+      {% if stepingr.quantity != 1 %}
+        {% if stepingr.unit.abbr_plural %}
+          {{ stepingr.unit.abbr_plural }}
         {% else %}
-          {{ item.unit.name_plural }}
+          {{ stepingr.unit.name_plural }}
         {% endif %}
       {% else %}
-        {% if item.unit.abbr_singular %}
-          {{ item.unit.abbr_singular }}
+        {% if stepingr.unit.abbr_singular %}
+          {{ stepingr.unit.abbr_singular }}
         {% else %}
-          {{ item.unit.name }}
+          {{ stepingr.unit.name }}
         {% endif %}
       {% endif %}
     </span>
@@ -26,6 +26,7 @@
     {% if edit_mode %}
     <button
         class="btn-icon"
+        hx-get="{% url 'htmx_step_ingredient_edit' stepingr.id %}"
         >
         {% include "recipes/icons/edit.html" %}
     </button>

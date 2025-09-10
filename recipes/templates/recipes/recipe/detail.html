@@ -22,7 +22,7 @@
     {% include "recipes/step/_list_item.html" %}
 
     <ul class="list-disc list-outside ml-6">
-      {% for item in step.ingredients.all %}
+      {% for stepingr in step.ingredients.all %}
       {% include "recipes/step_ingredient/_list_item.html" %}
       {% endfor %}
     </ul>

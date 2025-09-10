@@ -11,6 +11,7 @@ from .forms import (
     StepCreateFormSet,
     StepEditForm,
     StepIngredientCreateFormSet,
+    StepIngredientEditForm,
 )
 from .helpers import determine_is_chef
 from .models import Ingredient, Recipe, Step, StepIngredient
@@ -200,8 +201,37 @@ def htmx_step_edit(request, step_id):
 
 
 @permission_required("recipes.change_stepingredient")
-def htmx_step_ingredient_edit(request, step_id):
-    pass
+def htmx_step_ingredient_edit(request, stepingr_id):
+    db_stepingr = get_object_or_404(StepIngredient, id=stepingr_id)
+
+    if request.method == "POST":
+        form = StepIngredientEditForm(request.POST, instance=db_stepingr)
+        if form.is_valid():
+            db_stepingr.ingredient = form.cleaned_data["ingredient"]
+            db_stepingr.quantity = form.cleaned_data["quantity"]
+            db_stepingr.unit = form.cleaned_data["unit"]
+            db_stepingr.save()
+            context = {
+                "stepingr": db_stepingr,
+                "edit_mode": True,
+            }
+            return render(request, "recipes/step_ingredient/_list_item.html", context)
+        else:
+            # return form with errors
+            context = {"stepingr": db_stepingr, "form": form}
+            return render(request, "recipes/step_ingredient/_edit.html", context)
+
+    if request.method == "GET":
+        if request.GET.get("action", "") == "cancel":
+            context = {
+                "stepingr": db_stepingr,
+                "edit_mode": True,
+            }
+            return render(request, "recipes/step_ingredient/_list_item.html", context)
+        else:
+            form = StepIngredientEditForm(instance=db_stepingr)
+            context = {"stepingr": db_stepingr, "form": form}
+            return render(request, "recipes/step_ingredient/_edit.html", context)
 
 
 @permission_required("recipes.change_ingredient")
