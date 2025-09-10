@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load account_extras %}
+
+{% block content %}
+<div class="h-screen flex flex-col items-center justify-center text-center">
+
+  <h1 class="text-3xl mb-6">Recipe Book</h1>
+
+  {% if form.errors %}
+  <p>Your username and password didn't match. Please try again.</p>
+  {% endif %}
+
+  {% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+  {% endif %}
+
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <table>
+      <tr>
+        <td class="p-2">{{ form.username.label_tag }}</td>
+        <td class="p-2">{{ form.username|add_class:'form-input' }}</td>
+      </tr>
+      <tr>
+        <td class="p-2">{{ form.password.label_tag }}</td>
+        <td class="p-2">{{ form.password|add_class:'form-input' }}</td>
+      </tr>
+    </table>
+
+    <input type="submit" value="Login" class="btn mt-2">
+    <input type="hidden" name="next" value="{{ next }}">
+  </form>
+
+</div>
+{% endblock %}

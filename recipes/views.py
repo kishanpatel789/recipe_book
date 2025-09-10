@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import permission_required
 from django.db.models import F, Min, Prefetch, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -10,17 +11,26 @@ from .forms import (
     StepCreateFormSet,
     StepIngredientCreateFormSet,
 )
+from .helpers import determine_is_chef
 from .models import Ingredient, Recipe, Step, StepIngredient
 
 
 def index(request):
-    return render(request, "recipes/index.html")
+    is_chef = determine_is_chef(request)
+    context = {"is_chef": is_chef}
+
+    return render(request, "recipes/index.html", context)
 
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
+    is_chef = determine_is_chef(request)
+    context = {
+        "recipes": recipes,
+        "is_chef": is_chef,
+    }
 
-    return render(request, "recipes/recipe/list.html", {"recipes": recipes})
+    return render(request, "recipes/recipe/list.html", context)
 
 
 def recipe_detail(request, recipe_slug):
@@ -61,10 +71,17 @@ def recipe_detail(request, recipe_slug):
         .order_by("order_id")
     ).all()
 
-    # TODO: lock this to chef role after user model is extended
-    edit_mode = request.GET.get("action", "") == "edit"
+    edit_mode = False
+    is_chef = determine_is_chef(request)
+    if is_chef:
+        edit_mode = request.GET.get("action", "") == "edit"
 
-    context = {"recipe": recipe, "ingredients": ingredients, "edit_mode": edit_mode}
+    context = {
+        "recipe": recipe,
+        "ingredients": ingredients,
+        "edit_mode": edit_mode,
+        "is_chef": is_chef,
+    }
 
     return render(
         request,
@@ -73,6 +90,7 @@ def recipe_detail(request, recipe_slug):
     )
 
 
+@permission_required("recipes.add_recipe")
 def recipe_create(request):
     if request.method == "POST":
         form = RecipeCreateForm(request.POST)
@@ -138,11 +156,8 @@ def recipe_create(request):
     return render(request, "recipes/recipe/create.html", context)
 
 
-def recipe_edit(request): ...
-
-
-# TODO: lock this to user chef role only
 @require_POST
+@permission_required("recipes.delete_recipe")
 def recipe_delete(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
 
@@ -151,12 +166,14 @@ def recipe_delete(request, pk):
         return redirect("recipe_list")
 
 
+@permission_required("recipes.change_ingredient")
 def ingredient_list(request):
     ingredients = Ingredient.objects.all()
 
     return render(request, "recipes/ingredient/list.html", {"ingredients": ingredients})
 
 
+@permission_required("recipes.add_ingredient")
 def htmx_ingredient_create(request):
     if request.method == "POST":
         form = IngredientCreateForm(request.POST)
@@ -180,6 +197,7 @@ def htmx_ingredient_create(request):
             return render(request, "recipes/ingredient/_create.html", {"form": form})
 
 
+@permission_required("recipes.change_ingredient")
 def htmx_ingredient_edit(request, ingr_id):
     db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
 
@@ -208,6 +226,7 @@ def htmx_ingredient_edit(request, ingr_id):
 
 
 @require_http_methods(["DELETE"])
+@permission_required("recipes.delete_ingredient")
 def htmx_ingredient_delete(request, ingr_id):
     db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
     db_ingredient.delete()

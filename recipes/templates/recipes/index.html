@@ -8,7 +8,21 @@
 
   <ul class="space-y-2">
     <li><a href="{% url 'recipe_list' %}">View Recipes</a></li>
-    <li><a href="{% url 'ingredient_list' %}">Manage Ingredients</a></li>
+
+    {% if is_chef %}
+      <li><a href="{% url 'ingredient_list' %}">Manage Ingredients</a></li>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+     <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-link">
+          Logout ({{ user.username }})
+        </button>
+      </form>
+    {% else %}
+      <li><a href="{% url 'login' %}">Login</a></li>
+    {% endif %}
   </ul>
 
 </div>
