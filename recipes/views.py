@@ -13,7 +13,7 @@ from .forms import (
     StepIngredientCreateFormSet,
     StepIngredientEditForm,
 )
-from .helpers import determine_is_chef
+from .helpers import determine_is_chef, update_recipe_modified
 from .models import Ingredient, Recipe, Step, StepIngredient
 
 
@@ -104,7 +104,10 @@ def recipe_create(request):
         if all(
             [form.is_valid(), form_steps.is_valid(), form_stepingredients.is_valid()]
         ):
-            recipe = form.save()
+            recipe = form.save(commit=False)
+            recipe.created_by = request.user
+            recipe.modified_by = request.user
+            recipe.save()
 
             steps = form_steps.save(commit=False)
             step_map = {}
@@ -175,8 +178,8 @@ def htmx_step_edit(request, step_id):
     if request.method == "POST":
         form = StepEditForm(request.POST, instance=db_step)
         if form.is_valid():
-            db_step.instruction = form.cleaned_data["instruction"]
-            db_step.save()
+            db_step = form.save()
+            update_recipe_modified(db_step.recipe, request.user)
             context = {
                 "step": db_step,
                 "edit_mode": True,
@@ -207,10 +210,8 @@ def htmx_step_ingredient_edit(request, stepingr_id):
     if request.method == "POST":
         form = StepIngredientEditForm(request.POST, instance=db_stepingr)
         if form.is_valid():
-            db_stepingr.ingredient = form.cleaned_data["ingredient"]
-            db_stepingr.quantity = form.cleaned_data["quantity"]
-            db_stepingr.unit = form.cleaned_data["unit"]
-            db_stepingr.save()
+            db_stepingr = form.save()
+            update_recipe_modified(db_stepingr.step.recipe, request.user)
             context = {
                 "stepingr": db_stepingr,
                 "edit_mode": True,
