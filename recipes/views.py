@@ -13,12 +13,12 @@ from .forms import (
     StepIngredientCreateFormSet,
     StepIngredientEditForm,
 )
-from .helpers import determine_is_chef, update_recipe_modified
+from .helpers import determine_is_chef, get_favorite_recipes, update_recipe_modified
 from .models import Ingredient, Recipe, Step, StepIngredient
 
 
 def index(request):
-    is_chef = determine_is_chef(request)
+    is_chef = determine_is_chef(request.user)
     context = {"is_chef": is_chef}
 
     return render(request, "recipes/index.html", context)
@@ -26,9 +26,11 @@ def index(request):
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
-    is_chef = determine_is_chef(request)
+    favorites = get_favorite_recipes(request.user)
+    is_chef = determine_is_chef(request.user)
     context = {
         "recipes": recipes,
+        "favorites": favorites,
         "is_chef": is_chef,
     }
 
@@ -74,10 +76,12 @@ def recipe_detail(request, recipe_slug):
     ).all()
 
     edit_mode = False
-    is_chef = determine_is_chef(request)
+    is_chef = determine_is_chef(request.user)
     if is_chef:
         edit_mode = request.GET.get("action", "") == "edit"
-    is_fav = recipe in request.user.profile.favorites.all()
+    is_fav = False
+    if request.user.is_authenticated:
+        is_fav = recipe in request.user.profile.favorites.all()
 
     context = {
         "recipe": recipe,

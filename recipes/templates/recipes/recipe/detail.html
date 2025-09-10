@@ -6,6 +6,7 @@
 <h1 class="text-7xl mb-2">{{ recipe.name }}</h1>
 
 <div id="tags" class="flex flex-row items-center">
+  {% if user.is_authenticated %}
   <span
     hx-post="{% url 'htmx_toggle_favorite' recipe.id %}"
     class="cursor-pointer"
@@ -17,6 +18,7 @@
       {% include "recipes/icons/not_favorite.html" %}
     {% endif %}
   </span>
+  {% endif %}
   <span class="text-sm pl-2 text-recbksec">
     {% for tag in recipe.tags.all %}
     #{{tag.slug}}

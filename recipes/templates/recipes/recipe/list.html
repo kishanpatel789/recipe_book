@@ -19,6 +19,22 @@
     {% endfor %}
 </ul>
 
+{% if favorites %}
+<h2 class="mt-6 text-2xl flex flex-row items-center space-x-2">
+  <span>Favorites</span>
+  {% include 'recipes/icons/favorite.html' %}
+</h2>
+<ul>
+    {% for recipe in favorites %}
+    <li class="text-lg">
+        <a href="{% url 'recipe_detail' recipe.slug %}">
+            {{ recipe.name }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% else %}
 <p>No recipes to show.</p>
 {% endif %}
