@@ -1,0 +1,31 @@
+{% load recipe_extras %}
+<li>
+  <div class="flex flex-row items-center space-x-2">
+    <div>
+      {{ form.non_field_errors }}
+      {{ form.step_index }}
+
+      {{ form.ingredient.errors }}
+      {{ form.ingredient|add_class:'form-select' }}
+
+      {{ form.quantity.errors }}
+      {{ form.quantity|add_class:'form-select' }}
+
+      {{ form.unit.errors }}
+      {{ form.unit|add_class:'form-select' }}
+    </div>
+    <button
+        hx-get="{% url 'htmx_step_ingredient_edit' stepingr.id %}{% querystring action='cancel' %}"
+        class="btn-icon"
+        >
+        {% include "recipes/icons/cancel.html" %}
+    </button>
+    <button
+        hx-post="{% url 'htmx_step_ingredient_edit' stepingr.id %}"
+        hx-include="closest div"
+        class="btn-icon"
+        >
+        {% include "recipes/icons/confirm.html" %}
+    </button>
+  </div>
+</li>

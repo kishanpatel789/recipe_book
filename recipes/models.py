@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
 
@@ -7,8 +8,12 @@ class Recipe(models.Model):
     slug = models.SlugField(unique=True, max_length=200, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-    # created_by =
-    # modified_by =
+    created_by = models.ForeignKey(
+        User, null=True, on_delete=models.SET_NULL, related_name="recipes_created"
+    )
+    modified_by = models.ForeignKey(
+        User, null=True, on_delete=models.SET_NULL, related_name="recipes_modified"
+    )
 
     tags = models.ManyToManyField("Tag", blank=True)
     complementary = models.ManyToManyField("self", symmetrical=False, blank=True)

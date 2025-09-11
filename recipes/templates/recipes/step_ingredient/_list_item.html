@@ -1,0 +1,35 @@
+<li>
+  <div class="flex flex-row items-center space-x-2">
+    <span>
+      {{ stepingr.ingredient.name }}
+
+      {% if stepingr.quantity %}
+      &ndash;
+      {{ stepingr.quantity }}
+      {% endif %}
+
+      {% if stepingr.quantity != 1 %}
+        {% if stepingr.unit.abbr_plural %}
+          {{ stepingr.unit.abbr_plural }}
+        {% else %}
+          {{ stepingr.unit.name_plural }}
+        {% endif %}
+      {% else %}
+        {% if stepingr.unit.abbr_singular %}
+          {{ stepingr.unit.abbr_singular }}
+        {% else %}
+          {{ stepingr.unit.name }}
+        {% endif %}
+      {% endif %}
+    </span>
+
+    {% if edit_mode %}
+    <button
+        class="btn-icon"
+        hx-get="{% url 'htmx_step_ingredient_edit' stepingr.id %}"
+        >
+        {% include "recipes/icons/edit.html" %}
+    </button>
+      {% endif %}
+  </div>
+</li>

@@ -9,14 +9,16 @@ from .forms import (
     IngredientEditForm,
     RecipeCreateForm,
     StepCreateFormSet,
+    StepEditForm,
     StepIngredientCreateFormSet,
+    StepIngredientEditForm,
 )
-from .helpers import determine_is_chef
+from .helpers import determine_is_chef, get_favorite_recipes, update_recipe_modified
 from .models import Ingredient, Recipe, Step, StepIngredient
 
 
 def index(request):
-    is_chef = determine_is_chef(request)
+    is_chef = determine_is_chef(request.user)
     context = {"is_chef": is_chef}
 
     return render(request, "recipes/index.html", context)
@@ -24,9 +26,11 @@ def index(request):
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
-    is_chef = determine_is_chef(request)
+    favorites = get_favorite_recipes(request.user)
+    is_chef = determine_is_chef(request.user)
     context = {
         "recipes": recipes,
+        "favorites": favorites,
         "is_chef": is_chef,
     }
 
@@ -72,15 +76,19 @@ def recipe_detail(request, recipe_slug):
     ).all()
 
     edit_mode = False
-    is_chef = determine_is_chef(request)
+    is_chef = determine_is_chef(request.user)
     if is_chef:
         edit_mode = request.GET.get("action", "") == "edit"
+    is_fav = False
+    if request.user.is_authenticated:
+        is_fav = recipe in request.user.profile.favorites.all()
 
     context = {
         "recipe": recipe,
         "ingredients": ingredients,
         "edit_mode": edit_mode,
         "is_chef": is_chef,
+        "is_fav": is_fav,
     }
 
     return render(
@@ -102,7 +110,10 @@ def recipe_create(request):
         if all(
             [form.is_valid(), form_steps.is_valid(), form_stepingredients.is_valid()]
         ):
-            recipe = form.save()
+            recipe = form.save(commit=False)
+            recipe.created_by = request.user
+            recipe.modified_by = request.user
+            recipe.save()
 
             steps = form_steps.save(commit=False)
             step_map = {}
@@ -164,6 +175,70 @@ def recipe_delete(request, pk):
     if request.POST:
         recipe.delete()
         return redirect("recipe_list")
+
+
+@permission_required("recipes.change_step")
+def htmx_step_edit(request, step_id):
+    db_step = get_object_or_404(Step, id=step_id)
+
+    if request.method == "POST":
+        form = StepEditForm(request.POST, instance=db_step)
+        if form.is_valid():
+            db_step = form.save()
+            update_recipe_modified(db_step.recipe, request.user)
+            context = {
+                "step": db_step,
+                "edit_mode": True,
+            }
+            return render(request, "recipes/step/_list_item.html", context)
+        else:
+            # return form with errors
+            context = {"step": db_step, "form": form}
+            return render(request, "recipes/step/_edit.html", context)
+
+    if request.method == "GET":
+        if request.GET.get("action", "") == "cancel":
+            context = {
+                "step": db_step,
+                "edit_mode": True,
+            }
+            return render(request, "recipes/step/_list_item.html", context)
+        else:
+            form = StepEditForm(instance=db_step)
+            context = {"step": db_step, "form": form}
+            return render(request, "recipes/step/_edit.html", context)
+
+
+@permission_required("recipes.change_stepingredient")
+def htmx_step_ingredient_edit(request, stepingr_id):
+    db_stepingr = get_object_or_404(StepIngredient, id=stepingr_id)
+
+    if request.method == "POST":
+        form = StepIngredientEditForm(request.POST, instance=db_stepingr)
+        if form.is_valid():
+            db_stepingr = form.save()
+            update_recipe_modified(db_stepingr.step.recipe, request.user)
+            context = {
+                "stepingr": db_stepingr,
+                "edit_mode": True,
+            }
+            return render(request, "recipes/step_ingredient/_list_item.html", context)
+        else:
+            # return form with errors
+            context = {"stepingr": db_stepingr, "form": form}
+            return render(request, "recipes/step_ingredient/_edit.html", context)
+
+    if request.method == "GET":
+        if request.GET.get("action", "") == "cancel":
+            context = {
+                "stepingr": db_stepingr,
+                "edit_mode": True,
+            }
+            return render(request, "recipes/step_ingredient/_list_item.html", context)
+        else:
+            form = StepIngredientEditForm(instance=db_stepingr)
+            context = {"stepingr": db_stepingr, "form": form}
+            return render(request, "recipes/step_ingredient/_edit.html", context)
 
 
 @permission_required("recipes.change_ingredient")
@@ -231,3 +306,16 @@ def htmx_ingredient_delete(request, ingr_id):
     db_ingredient = get_object_or_404(Ingredient, id=ingr_id)
     db_ingredient.delete()
     return HttpResponse(status=200)
+
+
+@require_POST
+def htmx_toggle_favorite(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    profile = request.user.profile
+
+    if recipe in profile.favorites.all():
+        profile.favorites.remove(recipe)
+        return render(request, "recipes/icons/not_favorite.html")
+    else:
+        profile.favorites.add(recipe)
+        return render(request, "recipes/icons/favorite.html")

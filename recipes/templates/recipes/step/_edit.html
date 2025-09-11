@@ -1,0 +1,23 @@
+<li>
+  <div class="flex flex-row items-center space-x-2">
+    <div class="flex flex-col grow">
+      {{ form.non_field_errors }}
+      {{ form.instruction.errors }}
+      <input autofocus name="instruction" value="{{ form.instruction.value }}"
+      class="form-input grow">
+    </div>
+    <button
+        hx-get="{% url 'htmx_step_edit' step.id %}{% querystring action='cancel' %}"
+        class="btn-icon"
+        >
+        {% include "recipes/icons/cancel.html" %}
+    </button>
+    <button
+        hx-post="{% url 'htmx_step_edit' step.id %}"
+        hx-include="closest div"
+        class="btn-icon"
+        >
+        {% include "recipes/icons/confirm.html" %}
+    </button>
+  </div>
+</li>
