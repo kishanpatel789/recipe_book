@@ -1,51 +1,4 @@
-import pytest
-
-from recipes.models import Ingredient, Recipe, Tag, Unit
-
-
-@pytest.fixture
-def add_tags(db):
-    tag_main = Tag.objects.create(slug="main-dish")
-    tag_side = Tag.objects.create(slug="side-item")
-
-    return {"tag_main": tag_main, "tag_side": tag_side}
-
-
-@pytest.fixture
-def add_units(db):
-    unit_unit = Unit.objects.create(name="unit", name_plural="units")
-    unit_teaspoon = Unit.objects.create(
-        name="teaspoon",
-        name_plural="teaspoons",
-        abbr_singular="tsp",
-        abbr_plural="tsp",
-    )
-
-    return {"unit_unit": unit_unit, "unit_teaspoon": unit_teaspoon}
-
-
-@pytest.fixture
-def add_ingredients(db):
-    ingr_egg = Ingredient.objects.create(name="Egg")
-    ingr_flour = Ingredient.objects.create(name="All Purpose Flour")
-
-    return {"ingr_egg": ingr_egg, "ingr_flour": ingr_flour}
-
-
-@pytest.fixture
-def add_recipe(db, add_tags):
-    recipe = Recipe.objects.create(
-        name="Test Recipe",
-    )
-    recipe.tags.add(add_tags["tag_main"])
-
-    return recipe
-
-
-@pytest.fixture
-def add_step(add_recipe):
-    step = add_recipe.steps.create(order_id=1, instruction="Test instruction")
-    return step
+from recipes.models import Tag
 
 
 def test_create_recipe(add_recipe):
@@ -66,13 +19,10 @@ def test_create_step(add_step):
     assert str(step) == f"{step.recipe.slug}/{step.order_id}"
 
 
-def test_create_step_ingredient(add_step, add_units, add_ingredients):
-    step = add_step
+def test_create_step_ingredient(add_step_ingredient, add_units, add_ingredients):
+    step_ingredient = add_step_ingredient
     ingredient = add_ingredients["ingr_egg"]
     unit = add_units["unit_unit"]
-    step_ingredient = step.ingredients.create(
-        order_id=1, ingredient=ingredient, quantity=2, unit=unit
-    )
     assert step_ingredient.id is not None
     assert step_ingredient.order_id == 1
     assert step_ingredient.ingredient == ingredient
@@ -80,7 +30,7 @@ def test_create_step_ingredient(add_step, add_units, add_ingredients):
     assert step_ingredient.unit == unit
     assert (
         str(step_ingredient)
-        == f"{step.recipe.slug}/{step.order_id}/{step_ingredient.order_id}"
+        == f"{step_ingredient.step.recipe.slug}/{step_ingredient.step.order_id}/{step_ingredient.order_id}"
     )
 
 
