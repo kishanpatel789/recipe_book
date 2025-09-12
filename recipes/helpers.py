@@ -16,4 +16,4 @@ def get_favorite_recipes(user):
         recipes = user.profile.favorites.all()
         return recipes
     else:
-        return None
+        return []

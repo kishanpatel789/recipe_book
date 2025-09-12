@@ -75,13 +75,16 @@ def recipe_detail(request, recipe_slug):
         .order_by("order_id")
     ).all()
 
-    edit_mode = False
     is_chef = determine_is_chef(request.user)
     if is_chef:
         edit_mode = request.GET.get("action", "") == "edit"
-    is_fav = False
+    else:
+        edit_mode = False
+
     if request.user.is_authenticated:
         is_fav = recipe in request.user.profile.favorites.all()
+    else:
+        is_fav = False
 
     context = {
         "recipe": recipe,

@@ -16,4 +16,17 @@ dependencies = [
 [dependency-groups]
 dev = [
     "django-debug-toolbar>=6.0.0",
+    "pytest-cov>=7.0.0",
+    "pytest-django>=4.11.1",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "mysite.settings"
+python_files = ["test_*.py"]
+
+[tool.coverage.report]
+omit = [
+    "tests/*",
+    "*/migrations/*",
+    "*/management/*",
 ]
