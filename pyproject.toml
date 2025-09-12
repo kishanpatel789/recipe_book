@@ -22,7 +22,9 @@ dev = [
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "mysite.settings"
-python_files = ["test_*.py"]
+markers = [
+    "focus: Run focused tests"
+]
 
 [tool.coverage.report]
 omit = [
