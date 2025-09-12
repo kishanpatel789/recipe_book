@@ -13,5 +13,5 @@ cov:
 
 .PHONY: lint
 lint:
-	uv tool run ruff check src
-	uv tool run mypy src
+	uv tool run ruff check .
+	uv tool run ty check .
