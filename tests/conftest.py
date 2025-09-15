@@ -1,3 +1,5 @@
+import itertools
+
 import pytest
 from django.contrib.auth.models import Group, Permission
 
@@ -8,14 +10,15 @@ from recipes.models import Ingredient, Recipe, Tag, Unit
 def client_chef(client, db, django_user_model):
     user = django_user_model.objects.create_user(username="chef", password="pass12345")
     chef_group, _ = Group.objects.get_or_create(name="Chef")
-    chef_permissions = []
-    for model in ["recipe", "step", "stepingredient", "ingredient"]:
-        for action in ["add", "change", "delete"]:
-            chef_permissions.append(
-                Permission.objects.get(
-                    codename=f"{action}_{model}", content_type__app_label="recipes"
-                )
+    models = ["recipe", "step", "stepingredient", "ingredient"]
+    actions = ["add", "change", "delete"]
+    chef_permissions = set()
+    for model, action in itertools.product(models, actions):
+        chef_permissions.add(
+            Permission.objects.get(
+                codename=f"{action}_{model}", content_type__app_label="recipes"
             )
+        )
     chef_group.permissions.set(chef_permissions)
     chef_group.save()
     user.groups.add(chef_group)
