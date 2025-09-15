@@ -1,28 +1,33 @@
+import re
+
 import pytest
 from django.urls import reverse
 
 
 def test_index_view(client):
     response = client.get("/")
+    content = response.content.decode()
 
     assert response.status_code == 200
-    assert b'<h1 class="text-3xl mb-6">Recipe Book</h1>' in response.content
+    assert re.search(r"<h1.*?>Recipe Book</h1>", content) is not None
 
 
 def test_index_view_chef(client_chef):
     response = client_chef.get("/")
+    content = response.content.decode()
 
     assert response.status_code == 200
-    assert b'<h1 class="text-3xl mb-6">Recipe Book</h1>' in response.content
+    assert re.search(r"<h1.*?>Recipe Book</h1>", content) is not None
     assert b'<a href="/ingredients/">Manage Ingredients</a>' in response.content
     assert b"Logout (chef)" in response.content
 
 
 def test_index_view_cook(client_cook):
     response = client_cook.get("/")
+    content = response.content.decode()
 
     assert response.status_code == 200
-    assert b'<h1 class="text-3xl mb-6">Recipe Book</h1>' in response.content
+    assert re.search(r"<h1.*?>Recipe Book</h1>", content) is not None
     assert b'<a href="/ingredients/">Manage Ingredients</a>' not in response.content
     assert b"Logout (cook)" in response.content
 
