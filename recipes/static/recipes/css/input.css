@@ -26,6 +26,14 @@
   }
 }
 
+@layer components {
+  input[id^="id_tags_"] {
+    @apply accent-recbksec-300;
+    @apply w-4 h-4 rounded;
+    @apply cursor-pointer;
+  }
+}
+
 @utility btn {
   @apply inline-flex items-center justify-center
          rounded-lg px-4 py-2 font-medium

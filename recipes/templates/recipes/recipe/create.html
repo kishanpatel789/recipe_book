@@ -17,7 +17,14 @@
 
     <h2 class="text-2xl mt-2">Tags</h2>
     {{ form.tags.errors }}
-    {{ form.tags }}
+    <div class="flex flex-wrap gap-4">
+      {% for checkbox in form.tags %}
+        <label class="inline-flex items-center gap-1">
+          {{ checkbox.tag }}
+          <span>{{ checkbox.choice_label }}</span>
+        </label>
+      {% endfor %}
+    </div>
 
     <h2 class="text-2xl mt-2">Complementary Dishes</h2>
     {{ form.complementary.errors }}

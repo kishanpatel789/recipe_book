@@ -295,6 +295,9 @@
   .hidden {
     display: none;
   }
+  .inline-flex {
+    display: inline-flex;
+  }
   .h-5 {
     height: calc(var(--spacing) * 5);
   }
@@ -340,11 +343,20 @@
   .flex-row {
     flex-direction: row;
   }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
   .items-center {
     align-items: center;
   }
   .justify-center {
     justify-content: center;
+  }
+  .gap-1 {
+    gap: calc(var(--spacing) * 1);
+  }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
   }
   .space-y-2 {
     :where(& > :not(:last-child)) {
@@ -525,6 +537,15 @@
         text-decoration-line: underline;
       }
     }
+  }
+}
+@layer components {
+  input[id^="id_tags_"] {
+    accent-color: var(--color-recbksec-300);
+    height: calc(var(--spacing) * 4);
+    width: calc(var(--spacing) * 4);
+    border-radius: 0.25rem;
+    cursor: pointer;
   }
 }
 @property --tw-border-style {
