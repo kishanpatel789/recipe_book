@@ -1,5 +1,3 @@
-import itertools
-
 from django.contrib.auth.models import Group, Permission
 from django.core.management.base import BaseCommand
 
@@ -12,17 +10,14 @@ class Command(BaseCommand):
         cook_group, _ = Group.objects.get_or_create(name="Cook")
 
         # chefs have read-write access
-        chef_permissions = []
         models = ["recipe", "step", "stepingredient", "ingredient"]
-        actions = ["add", "change", "delete"]
-        for model, action in itertools.product(models, actions):
-            chef_permissions.append(
-                Permission.objects.get(
-                    codename=f"{action}_{model}", content_type__app_label="recipes"
-                )
-            )
-        chef_group.permissions.set(chef_permissions)
-        chef_group.save()
+        actions = ["add", "change", "delete"]  # maybe include "view"
+        wanted = [f"{a}_{m}" for m in models for a in actions]
+        perms_qs = Permission.objects.filter(
+            content_type__app_label="recipes",
+            codename__in=wanted,
+        )
+        chef_group.permissions.set(perms_qs)
 
         # cooks have standard read-only access
         cook_group.permissions.clear()
