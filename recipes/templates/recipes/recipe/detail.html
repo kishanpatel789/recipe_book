@@ -94,7 +94,7 @@
   <form
       method="POST"
       action="{% url 'recipe_delete' recipe.id %}"
-      onsubmit="return confirm('Are you sure you want to delete \'{{ recipe.name }}\'?');"
+      onsubmit="return confirm('Are you sure you want to delete \'{{ recipe.name|escapejs }}\'?');"
       >
       {% csrf_token %}
       <button type="submit" class="btn">Delete Recipe</button>
