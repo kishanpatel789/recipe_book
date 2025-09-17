@@ -117,6 +117,7 @@ def recipe_create(request):
             recipe.created_by = request.user
             recipe.modified_by = request.user
             recipe.save()
+            form.save_m2m()
 
             steps = form_steps.save(commit=False)
             step_map = {}
