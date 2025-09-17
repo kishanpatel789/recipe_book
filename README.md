@@ -2,7 +2,9 @@
 
 A Django project to keep your favorite recipes.
 
-Recipe Book stores your family recipes for easy access, without the bloat of ads and popups. The design is intentionally minimal to give you what you want: the recipe. You can...
+Recipe Book stores your family recipes for easy access, without the bloat of ads and popups. The design is intentionally minimal to give you what you want: the recipe.
+
+You can...
 
 - View recipes and mark your favorites.
 - Create new recipes or edit existing ones.
@@ -24,7 +26,11 @@ cd recipe_book
 ```
 
 ### Create Virtual Environment
-Then create the virtual environment by running `uv sync`.
+Then create the virtual environment by running the uv command:
+
+```bash
+uv sync
+```
 
 ### Configure App
 
@@ -36,7 +42,8 @@ cp .env.template .env
 
 Populate the .env file with the requested values:
 
-- `SECRET_KEY`: used in [Django settings](https://docs.djangoproject.com/en/5.2/ref/settings/#std-setting-SECRET_KEY) for cryptographic signing. You can run a quick command like `python -c 'import secrets; print(secrets.token_hex())'` to generate a value.
+- `SECRET_KEY`: used in [Django settings](https://docs.djangoproject.com/en/5.2/ref/settings/#std-setting-SECRET_KEY) for cryptographic signing. You can run a quick command like  the following
+  - `python -c 'import secrets; print(secrets.token_hex())'`
 - `DATABASE_URL`: a connection string to a database. For sqlite, you may use something like `DATABASE_URL=sqlite:///db.sqlite`.
 
 Run the following commands to set up the database tables:
@@ -90,7 +97,11 @@ Recipes display nested lists. A recipe has many steps, and each step can have a 
 
 The backend [Django admin site](https://docs.djangoproject.com/en/5.2/ref/contrib/admin/) can be reached at `http://localhost:8000/admin`. The admin site has been set up to manage user accounts and to make full changes to the recipe data.
 
-It's recommended to create a superuser for accessing the admin site: `uv run python manage.py createsuperuser`
+It's recommended to create a superuser for accessing the admin site:
+
+```bash
+uv run python manage.py createsuperuser
+```
 
 ## Architecture
 
